@@ -170,6 +170,9 @@ class SpatialIndexAdapter:
         self._use_ckdtree = use_ckdtree if use_ckdtree is not None else USE_CKDTREE
         self._leafsize = leafsize if leafsize is not None else CKDTREE_LEAFSIZE
 
+        # Build sequence counter (incremented on every build for cache invalidation)
+        self._build_seq: int = 0
+
         # Phase 5: Stable index mapping for batch queries
         self._row_of_id: dict = {}  # entity_id -> row index
         self._id_of_row: List[str] = []  # row index -> entity_id
@@ -242,6 +245,9 @@ class SpatialIndexAdapter:
                 positions = np.array([e.position for e in self._entities], dtype=np.float64)
             else:
                 positions = None
+
+        # Increment build sequence (for cache invalidation in consumers)
+        self._build_seq += 1
 
         # Phase 5 refined: Reset timing
         self.last_build_main_ms = 0.0
