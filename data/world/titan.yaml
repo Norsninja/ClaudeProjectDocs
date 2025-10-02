@@ -1,0 +1,44 @@
+# Titan - World configuration for Shipmind aquarium simulation
+
+world_id: world-titan
+name: Titan Subsurface Ocean
+description: >
+  Saturn's moon Titan hosts a subsurface ocean beneath 10-20km ice crust.
+  Water-ammonia mixture, cryovolcanism, potential prebiotic chemistry.
+  Global ocean estimated 55km below surface, 300km deep.
+  This simulation focuses on accessible depths (20-300m below ice-water interface).
+
+parameters:
+  seed: 12345  # World generation seed (propagates to biomes)
+
+  gravity_ms2: 1.35  # Titan surface gravity
+  fluid_density_kgm3: 1050.0  # Water-ammonia mixture (~5% heavier than pure water)
+  ambient_temperature_c: -2.0  # Near freezing, kept liquid by ammonia and pressure
+
+  # Global currents (MVP: uniform direction, post-MVP: per-biome)
+  current_speed_ms: 0.2  # Gentle ambient current
+  current_direction_deg: 45.0  # Northeast drift
+
+simulation:
+  tick_delta_seconds: 1.0  # Fixed 1-second time step
+  active_region_radius: 2000.0  # Active simulation within 2km of player
+
+  # Obstacle avoidance defaults (per SD's recommendations)
+  influence_radius_factor: 2.5  # Influence = obstacle radius × 2.5
+  avoidance_weight: 0.6  # 60% of movement budget for avoidance
+  seabed_influence_distance: 5.0  # Push entities up within 5m of seabed
+
+biomes:
+  # MVP: Single biome (Vent Field Alpha)
+  - biome_id: biome-vent-field-alpha
+    file_path: biomes/vent-field-alpha.yaml
+    enabled: true
+
+  # Post-MVP biomes (disabled for now)
+  # - biome_id: biome-trench-edge
+  #   file_path: biomes/trench-edge.yaml
+  #   enabled: false
+
+  # - biome_id: biome-ice-interface
+  #   file_path: biomes/ice-interface.yaml
+  #   enabled: false

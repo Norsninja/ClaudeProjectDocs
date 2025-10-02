@@ -1,0 +1,51 @@
+# Tube Forest - Sessile filter feeder (MVP stub)
+
+species_id: sp-002-tube-forest
+name: Tube Forest
+description: >
+  Sessile chemosynthetic organisms growing in clusters near hydrothermal vents.
+  Cylindrical tubes 3-8 meters tall, filter organic matter from water column.
+  Form dense forests providing habitat structure for mobile species.
+
+tags:
+  - sessile
+  - filter_feeder
+
+parameters: {}
+
+physical:
+  size_range:
+    min_meters: 3.0
+    max_meters: 8.0
+  mass_kg: 50.0
+  personal_space: 0.0  # Grows in dense clusters
+  avoidance_weight: 0.0  # Does not move
+
+emissions:
+  acoustic:
+    peak_hz: 200
+    bandwidth_hz: 100
+    amplitude: 0.1  # Passive water flow sounds
+  thermal:
+    delta_celsius: 0.5  # Slightly warm from metabolic activity
+  chemical:
+    compound: sulfide_trace
+    concentration: 0.3  # Chemosynthetic byproducts
+
+movement:
+  max_speed_ms: 0.0  # Sessile
+  acceleration_ms2: 0.0
+  turn_rate_deg_s: 0.0
+
+behaviors:
+  # Only behavior: hold position (sessile)
+  - id: hold
+    priority: 1
+    conditions: []
+    action:
+      type: hold
+      speed_multiplier: 0.0
+
+knowledge:
+  gossip_range: 0.0  # Does not communicate
+  token_capacity: 0

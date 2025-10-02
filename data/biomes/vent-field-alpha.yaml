@@ -1,0 +1,110 @@
+# Vent Field Alpha - Primary biome for MVP testing
+# Hand-authored positions (12 vents, 3 ridges, 8 tube clusters)
+
+biome_id: biome-vent-field-alpha
+name: Vent Field Alpha
+description: >
+  First discovered hydrothermal vent field in Titan's subsurface ocean.
+  Active vents emit thermal and chemical plumes, supporting dense tube forest
+  colonies. Drifters congregate near vents for food. Shadow predators patrol
+  the periphery. Depth range: 50-150 meters below ice crust.
+
+seed: 42  # Deterministic placement (for future procedural variation)
+
+bounds:
+  center: [0.0, -100.0, 0.0]  # Y = -100m depth, centered at origin
+  radius: 500.0  # 500m radius biome
+
+obstacles:
+  # 12 Hydrothermal vents (spherical obstacles)
+  spheres:
+    - id: vent-001
+      center: [50.0, -95.0, 80.0]
+      radius: 4.0
+      influence_radius: 10.0  # Override default for active vent
+
+    - id: vent-002
+      center: [-30.0, -105.0, 120.0]
+      radius: 3.5
+
+    - id: vent-003
+      center: [120.0, -92.0, -40.0]
+      radius: 5.0
+
+    - id: vent-004
+      center: [-80.0, -110.0, -60.0]
+      radius: 3.0
+
+    - id: vent-005
+      center: [200.0, -98.0, 150.0]
+      radius: 4.5
+
+    - id: vent-006
+      center: [-150.0, -102.0, 90.0]
+      radius: 3.8
+
+    - id: vent-007
+      center: [10.0, -108.0, -140.0]
+      radius: 4.2
+
+    - id: vent-008
+      center: [180.0, -94.0, -100.0]
+      radius: 5.5
+
+    - id: vent-009
+      center: [-120.0, -115.0, -150.0]
+      radius: 3.2
+
+    - id: vent-010
+      center: [90.0, -100.0, 200.0]
+      radius: 4.8
+
+    - id: vent-011
+      center: [-200.0, -107.0, -20.0]
+      radius: 3.6
+
+    - id: vent-012
+      center: [-60.0, -96.0, 180.0]
+      radius: 4.0
+
+  # 3 Geological ridges (cylindrical obstacles)
+  cylinders:
+    - id: ridge-001
+      start: [-200.0, -120.0, -100.0]
+      end: [100.0, -110.0, -80.0]
+      radius: 8.0
+      influence_radius: 20.0
+
+    - id: ridge-002
+      start: [-50.0, -115.0, -200.0]
+      end: [50.0, -105.0, 200.0]
+      radius: 10.0
+
+    - id: ridge-003
+      start: [150.0, -125.0, -150.0]
+      end: [200.0, -100.0, 100.0]
+      radius: 6.0
+
+  # Seabed (planar obstacle)
+  planes:
+    - id: seabed
+      type: seabed
+      y_level: -150.0  # Ocean floor at -150m
+      influence_distance: 5.0  # Push entities up when within 5m of floor
+
+spawning:
+  species:
+    # 100 Drifters (MVP test population)
+    - species_id: sp-001-drifter
+      count: 100
+      distribution: clustered  # Near vents
+
+    # 40 Tube Forest clusters (sessile background)
+    - species_id: sp-002-tube-forest
+      count: 40
+      distribution: near_obstacles  # Attached to vents/ridges
+
+    # 3 Shadows (predators patrolling periphery)
+    - species_id: sp-003-shadow
+      count: 3
+      distribution: uniform

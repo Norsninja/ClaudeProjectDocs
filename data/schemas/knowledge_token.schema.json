@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shipmind.game/schemas/knowledge_token.schema.json",
+  "title": "Knowledge Token Definitions",
+  "description": "Defines knowledge token types, decay rates, and merge algorithms for the aquarium simulation.",
+  "type": "object",
+  "required": ["tokens"],
+  "properties": {
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "value_type", "decay"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "Token type identifier (snake_case, e.g., ship_sentiment)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description"
+          },
+          "value_type": {
+            "type": "string",
+            "enum": ["float", "boolean", "position", "entity_id"],
+            "description": "Data type of token value"
+          },
+          "value_range": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "description": "Minimum valid value (for float type)"
+              },
+              "max": {
+                "type": "number",
+                "description": "Maximum valid value (for float type)"
+              }
+            },
+            "description": "Optional value constraints"
+          },
+          "decay": {
+            "type": "object",
+            "required": ["freshness_rate", "reliability_rate"],
+            "properties": {
+              "freshness_rate": {
+                "type": "number",
+                "minimum": 0.0,
+                "description": "Linear decay per second (0 = no decay)"
+              },
+              "reliability_rate": {
+                "type": "number",
+                "minimum": 0.0,
+                "description": "Linear decay per second (slower than freshness)"
+              },
+              "eviction_threshold": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "default": 0.0,
+                "description": "Delete token when freshness drops below this"
+              }
+            }
+          },
+          "merge": {
+            "type": "object",
+            "required": ["algorithm"],
+            "properties": {
+              "algorithm": {
+                "type": "string",
+                "enum": ["weighted_average", "most_recent", "most_reliable", "logical_or"],
+                "description": "How to merge two tokens of same kind"
+              },
+              "weight_freshness": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "default": 0.5,
+                "description": "Freshness weight in weighted_average (vs reliability)"
+              }
+            }
+          },
+          "gossip": {
+            "type": "object",
+            "properties": {
+              "shareable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Can this token be shared via gossip"
+              },
+              "attenuation": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "default": 0.1,
+                "description": "Reliability reduction when gossiped (per hop)"
+              }
+            }
+          },
+          "initial_values": {
+            "type": "object",
+            "description": "Default values for new tokens (optional)",
+            "properties": {
+              "freshness": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "default": 1.0
+              },
+              "reliability": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "default": 1.0
+              },
+              "source": {
+                "type": "string",
+                "enum": ["direct", "gossip", "inference"],
+                "default": "direct"
+              }
+            }
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

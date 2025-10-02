@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shipmind.game/schemas/interaction.schema.json",
+  "title": "Interaction Rules",
+  "description": "Defines gossip protocols and collision responses for the aquarium simulation.",
+  "type": "object",
+  "required": ["rules"],
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "participants"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Rule identifier (hyphen-case)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["gossip", "collision", "territorial"],
+            "description": "Interaction type"
+          },
+          "participants": {
+            "type": "object",
+            "required": ["entity_a", "entity_b"],
+            "properties": {
+              "entity_a": {
+                "type": "object",
+                "required": ["tags"],
+                "properties": {
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Tags that entity A must match (ANY)"
+                  },
+                  "species_id": {
+                    "type": "string",
+                    "description": "Optional: specific species requirement"
+                  }
+                }
+              },
+              "entity_b": {
+                "type": "object",
+                "required": ["tags"],
+                "properties": {
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "species_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "trigger": {
+            "type": "object",
+            "properties": {
+              "max_distance": {
+                "type": "number",
+                "minimum": 0.0,
+                "description": "Maximum distance for interaction (meters)"
+              },
+              "requires_line_of_sight": {
+                "type": "boolean",
+                "default": false,
+                "description": "Must entities see each other (post-MVP)"
+              }
+            }
+          },
+          "effects": {
+            "type": "object",
+            "description": "Type-specific effects",
+            "properties": {
+              "gossip": {
+                "type": "object",
+                "properties": {
+                  "token_kinds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Which knowledge tokens to exchange (empty = all)"
+                  },
+                  "reliability_attenuation": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "default": 0.1,
+                    "description": "Reduce reliability by this factor when sharing"
+                  }
+                }
+              },
+              "collision": {
+                "type": "object",
+                "properties": {
+                  "elasticity": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "default": 0.5,
+                    "description": "Bounce coefficient (0 = stick, 1 = perfect bounce)"
+                  },
+                  "damage": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "default": 0.0,
+                    "description": "Health damage on collision (post-MVP)"
+                  }
+                }
+              },
+              "territorial": {
+                "type": "object",
+                "properties": {
+                  "aggression_token": {
+                    "type": "string",
+                    "description": "Knowledge token to modify (e.g., ship_sentiment)"
+                  },
+                  "value_delta": {
+                    "type": "number",
+                    "description": "Amount to change token value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

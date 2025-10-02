@@ -1,0 +1,105 @@
+# Knowledge Token Definitions
+# Defines token types, decay rates, and merge algorithms
+
+tokens:
+  # Ship sentiment: How does entity feel about the ship? (-1 = hostile, +1 = friendly)
+  - kind: ship_sentiment
+    description: "Entity's attitude toward ship based on interactions"
+    value_type: float
+    value_range:
+      min: -1.0
+      max: 1.0
+    decay:
+      freshness_rate: 0.01  # Decays slowly (10% per 10 seconds)
+      reliability_rate: 0.005  # Reliability decays slower
+      eviction_threshold: 0.0  # Delete when freshness reaches 0
+    merge:
+      algorithm: weighted_average
+      weight_freshness: 0.6  # Fresher info weighted higher
+    gossip:
+      shareable: true
+      attenuation: 0.1  # 10% reliability loss per gossip hop
+    initial_values:
+      freshness: 1.0
+      reliability: 1.0
+      source: direct
+
+  # Ship capabilities: What can the ship do? (encoded as float for MVP)
+  - kind: ship_capabilities
+    description: "Observed ship abilities (lights, sonar, movement speed)"
+    value_type: float
+    value_range:
+      min: 0.0
+      max: 1.0  # 0 = passive, 1 = highly active/dangerous
+    decay:
+      freshness_rate: 0.005  # Capabilities change slowly
+      reliability_rate: 0.002
+      eviction_threshold: 0.0
+    merge:
+      algorithm: most_recent  # Newer observations override old
+    gossip:
+      shareable: true
+      attenuation: 0.15  # Less reliable when gossiped
+    initial_values:
+      freshness: 1.0
+      reliability: 0.8  # Observations are imperfect
+      source: direct
+
+  # Predator location: Where was a predator last seen?
+  - kind: predator_location
+    description: "Last known position of nearby predator"
+    value_type: position  # [x, y, z] coordinates (handled as special case)
+    decay:
+      freshness_rate: 0.05  # Decays fast (predators move)
+      reliability_rate: 0.02
+      eviction_threshold: 0.2  # Delete when very stale
+    merge:
+      algorithm: most_recent  # Latest sighting wins
+    gossip:
+      shareable: true
+      attenuation: 0.2  # Position gossip is unreliable (predator has moved)
+    initial_values:
+      freshness: 1.0
+      reliability: 0.9
+      source: direct
+
+  # Forage location: Where is food abundant? (post-MVP)
+  - kind: forage_location
+    description: "Location of abundant organic particulates"
+    value_type: position
+    decay:
+      freshness_rate: 0.02  # Food sources persist longer than predators
+      reliability_rate: 0.01
+      eviction_threshold: 0.1
+    merge:
+      algorithm: weighted_average  # Average multiple food source reports
+      weight_freshness: 0.5
+    gossip:
+      shareable: true
+      attenuation: 0.1
+    initial_values:
+      freshness: 1.0
+      reliability: 0.7
+      source: inference  # Often inferred from observations
+
+  # Vent temperature: Thermal vent characteristics (post-MVP, environmental knowledge)
+  - kind: vent_temperature
+    description: "Observed vent thermal output"
+    value_type: float
+    value_range:
+      min: 0.0
+      max: 100.0  # Degrees Celsius above ambient
+    decay:
+      freshness_rate: 0.001  # Vents change very slowly
+      reliability_rate: 0.0005
+      eviction_threshold: 0.0
+    merge:
+      algorithm: weighted_average
+      weight_freshness: 0.3  # Reliability matters more (vents are stable)
+    gossip:
+      shareable: true
+      attenuation: 0.05  # Environmental knowledge is stable
+    initial_values:
+      freshness: 1.0
+      reliability: 0.95
+      source: direct

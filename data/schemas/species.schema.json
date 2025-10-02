@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shipmind.game/schemas/species.schema.json",
+  "title": "Species Definition",
+  "description": "Defines a species' physical properties, behavioral rules, emissions, and movement characteristics for the aquarium simulation.",
+  "type": "object",
+  "required": ["species_id", "name", "tags", "physical", "emissions", "movement", "behaviors"],
+  "properties": {
+    "species_id": {
+      "type": "string",
+      "pattern": "^sp-[0-9]{3}-[a-z-]+$",
+      "description": "Unique species identifier (e.g., sp-001-drifter)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable species name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional flavor text for documentation"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Classification tags used by behavioral conditions. Freeform strings. Suggested: mobile, sessile, predator, prey, social, territorial, bioluminescent, artificial, scavenger, schooling, filter_feeder, herbivore, carnivore, nocturnal."
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Optional named constants for behavior conditions (supports compile-time interpolation)",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "physical": {
+      "type": "object",
+      "required": ["size_range", "mass_kg"],
+      "properties": {
+        "size_range": {
+          "type": "object",
+          "required": ["min_meters", "max_meters"],
+          "properties": {
+            "min_meters": {
+              "type": "number",
+              "minimum": 0.01,
+              "description": "Minimum entity size (meters)"
+            },
+            "max_meters": {
+              "type": "number",
+              "minimum": 0.01,
+              "description": "Maximum entity size (meters)"
+            }
+          },
+          "description": "Per-instance size variation range (seeded)"
+        },
+        "mass_kg": {
+          "type": "number",
+          "minimum": 0.001,
+          "description": "Base mass in kilograms (affects inertia)"
+        },
+        "personal_space": {
+          "type": "number",
+          "minimum": 0.0,
+          "default": 1.0,
+          "description": "Comfortable distance from neighbors (meters)"
+        },
+        "avoidance_weight": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.6,
+          "description": "Override global obstacle avoidance strength (0-1)"
+        }
+      }
+    },
+    "emissions": {
+      "type": "object",
+      "description": "Base emission profile (modified by behavior state)",
+      "properties": {
+        "acoustic": {
+          "type": "object",
+          "properties": {
+            "peak_hz": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 100000,
+              "description": "Peak frequency in Hertz"
+            },
+            "bandwidth_hz": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Frequency bandwidth (Hz)"
+            },
+            "amplitude": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Base amplitude (0-1, normalized)"
+            }
+          }
+        },
+        "thermal": {
+          "type": "object",
+          "properties": {
+            "delta_celsius": {
+              "type": "number",
+              "description": "Temperature difference from ambient (°C)"
+            }
+          }
+        },
+        "chemical": {
+          "type": "object",
+          "properties": {
+            "compound": {
+              "type": "string",
+              "description": "Chemical signature identifier"
+            },
+            "concentration": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Normalized concentration (0-1)"
+            }
+          }
+        },
+        "magnetic": {
+          "type": "object",
+          "properties": {
+            "delta_microtesla": {
+              "type": "number",
+              "description": "Magnetic field deviation (µT)"
+            }
+          }
+        },
+        "bioluminescent": {
+          "type": "object",
+          "properties": {
+            "intensity": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Base light intensity (0-1)"
+            },
+            "wavelength_nm": {
+              "type": "number",
+              "minimum": 380,
+              "maximum": 750,
+              "description": "Peak wavelength in nanometers"
+            }
+          }
+        }
+      }
+    },
+    "movement": {
+      "type": "object",
+      "required": ["max_speed_ms"],
+      "properties": {
+        "max_speed_ms": {
+          "type": "number",
+          "minimum": 0.0,
+          "description": "Maximum speed in meters per second"
+        },
+        "acceleration_ms2": {
+          "type": "number",
+          "minimum": 0.0,
+          "default": 1.0,
+          "description": "Acceleration rate (m/s²)"
+        },
+        "turn_rate_deg_s": {
+          "type": "number",
+          "minimum": 0.0,
+          "default": 90.0,
+          "description": "Maximum turn rate (degrees/second)"
+        },
+        "depth_range": {
+          "type": "object",
+          "properties": {
+            "shallow_limit_meters": {
+              "type": "number",
+              "description": "Shallowest depth limit (negative, e.g. -20 = 20m below surface)"
+            },
+            "deep_limit_meters": {
+              "type": "number",
+              "description": "Deepest depth limit (negative, e.g. -200 = 200m below surface)"
+            }
+          },
+          "description": "Preferred depth range (optional constraint). Shallow limit is less negative than deep limit."
+        }
+      }
+    },
+    "behaviors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "priority", "conditions", "action"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Behavior identifier (hyphen-case)"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Priority (lower = higher, evaluated in ascending order). Must be unique within species. Engine stops on first matching behavior."
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["nearest_entity", "knowledge_token", "token_exists", "within_depth_band"],
+                  "description": "Condition type"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "For nearest_entity: tag to search for"
+                },
+                "max_distance": {
+                  "type": "number",
+                  "minimum": 0.0,
+                  "description": "For nearest_entity: maximum distance in meters"
+                },
+                "token": {
+                  "type": "string",
+                  "description": "For knowledge_token: token kind to check"
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": ["less_than", "greater_than", "less_equal", "greater_equal", "equal"],
+                  "description": "For knowledge_token: comparison operator"
+                },
+                "value": {
+                  "type": "number",
+                  "description": "For knowledge_token: threshold value"
+                },
+                "min_depth": {
+                  "type": "number",
+                  "description": "For within_depth_band: minimum depth (negative)"
+                },
+                "max_depth": {
+                  "type": "number",
+                  "description": "For within_depth_band: maximum depth (negative)"
+                }
+              }
+            },
+            "description": "All conditions must be true (AND logic)"
+          },
+          "action": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["flee", "investigate", "forage", "hold", "align_with_current"],
+                "description": "Abstract action (kernel maps to velocity)"
+              },
+              "speed_multiplier": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 2.0,
+                "default": 1.0,
+                "description": "Multiply max_speed by this factor"
+              },
+              "emission_multipliers": {
+                "type": "object",
+                "description": "Per-channel emission multipliers (0.0-3.0). Kernel applies to appropriate base emission field: acoustic→amplitude, thermal→delta_celsius, chemical→concentration, magnetic→delta_microtesla, bioluminescent→intensity.",
+                "properties": {
+                  "acoustic": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 3.0,
+                    "description": "Multiplies base acoustic.amplitude"
+                  },
+                  "thermal": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 3.0,
+                    "description": "Multiplies base thermal.delta_celsius"
+                  },
+                  "chemical": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 3.0,
+                    "description": "Multiplies base chemical.concentration"
+                  },
+                  "magnetic": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 3.0,
+                    "description": "Multiplies base magnetic.delta_microtesla"
+                  },
+                  "bioluminescent": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 3.0,
+                    "description": "Multiplies base bioluminescent.intensity"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "Priority-ordered behavior list (evaluated top-to-bottom)"
+    },
+    "knowledge": {
+      "type": "object",
+      "properties": {
+        "gossip_range": {
+          "type": "number",
+          "minimum": 0.0,
+          "description": "Distance for knowledge token exchange (meters)"
+        },
+        "token_capacity": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 10,
+          "description": "Maximum knowledge tokens per entity (0 = no knowledge system)"
+        }
+      }
+    }
+  }
+}

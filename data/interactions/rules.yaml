@@ -1,0 +1,54 @@
+# Interaction Rules - Gossip and collision behaviors
+
+rules:
+  # Gossip: Drifter ↔ Drifter knowledge exchange
+  - id: drifter-gossip
+    type: gossip
+    participants:
+      entity_a:
+        tags: [social]  # Any social species
+        species_id: sp-001-drifter  # Currently only Drifters gossip
+      entity_b:
+        tags: [social]
+        species_id: sp-001-drifter
+    trigger:
+      max_distance: 50.0  # Within gossip_range
+    effects:
+      gossip:
+        token_kinds:
+          - ship_sentiment
+          - ship_capabilities
+          - predator_location
+        reliability_attenuation: 0.1  # Lose 10% reliability per hop
+
+  # Territorial: Shadow asserts dominance near Drifters (post-MVP)
+  # Placeholder for future territorial aggression mechanics
+  - id: shadow-territorial
+    type: territorial
+    participants:
+      entity_a:
+        tags: [predator, territorial]
+        species_id: sp-003-shadow
+      entity_b:
+        tags: [prey]
+    trigger:
+      max_distance: 150.0  # Shadow territory radius
+    effects:
+      territorial:
+        aggression_token: ship_sentiment  # For MVP, no effect yet
+        value_delta: 0.0  # Post-MVP: reduce sentiment when predator nearby
+
+  # Collision: Generic elastic collision between mobile entities
+  - id: mobile-collision
+    type: collision
+    participants:
+      entity_a:
+        tags: [mobile]
+      entity_b:
+        tags: [mobile]
+    trigger:
+      max_distance: 0.0  # Triggers on overlap
+    effects:
+      collision:
+        elasticity: 0.5  # Semi-elastic bounce
+        damage: 0.0  # No health system in MVP
