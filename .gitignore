@@ -1,19 +1,51 @@
-# Claude Code local settings
-.claude/settings.local.json
-
-# OS files
+# OS/Editor
 .DS_Store
 Thumbs.db
-
-# Editor directories
-.vscode/
 .idea/
+.vscode/
 
-# Temporary files
-*.tmp
-*.temp
-*.swp
-*~
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+coverage.xml
+dist/
+build/
+*.egg-info/
 
-# Logs
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Logs and temp
 *.log
+tmp/
+*.tmp
+
+# Notebooks (optional – uncomment to ignore checkpoints)
+# .ipynb_checkpoints/
+
+# Local data caches
+*.cache
+
+# OS-specific
+ehthumbs.db
+Desktop.ini
+
+# Tooling
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.benchmarks/
+
+# Generated artifacts
+project/status/phase5_performance.md
+
+# AI assistant configs (local settings)
+.claude/
+.codex/
+
