@@ -15,7 +15,7 @@ USE_CKDTREE = True
 
 # cKDTree build parameters (Phase 4+)
 CKDTREE_LEAFSIZE = 16  # Leaf size for cKDTree construction
-CKDTREE_WORKERS = -1   # Number of workers for parallel queries (-1 = all cores)
+CKDTREE_WORKERS = 1   # Single-threaded (1.86x faster than -1 for gossip @ 1000 entities)
 
 # Phase 5: Per-tag, per-biome subtrees for batch queries
 USE_PER_TAG_TREES = True  # Enable subtree optimization (Phase 5+)
@@ -68,6 +68,26 @@ VENT_THERMAL_BASE_DELTA = 5.0         # Celsius above ambient for vents
 TOKEN_DEFAULTS = {
     'ship_sentiment': 0.0,  # Neutral sentiment (range: -1.0 hostile to 1.0 friendly)
 }
+
+
+# ============================================================================
+# Knowledge Gossip Configuration (Phase 6+)
+# ============================================================================
+
+# Enable knowledge gossip system
+USE_GOSSIP = True
+
+# Maximum token exchanges per entity per tick
+GOSSIP_EXCHANGES_PER_ENTITY = 2
+
+# Fallback gossip range when Species.gossip_range_m is not specified
+GOSSIP_FALLBACK_RANGE_M = 15.0
+
+# Allowed token kinds for gossip (Phase 1: ship_sentiment only)
+GOSSIP_ALLOWED_KINDS = ['ship_sentiment']
+
+# Minimum gossip neighbors threshold for diagnostics (warn if entity has fewer)
+MIN_GOSSIP_NEIGHBORS = 3
 
 
 # ============================================================================
