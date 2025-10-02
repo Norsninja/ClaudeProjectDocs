@@ -1,0 +1,725 @@
+============================================================
+Phase 4b A/B Test: Verify cKDTree Correctness & Performance
+============================================================
+
+============================================================
+A/B Comparison Test: O(n) vs cKDTree (100 entities)
+============================================================
+
+[RUN 1] USE_CKDTREE=False (O(n) fallback)
+------------------------------------------------------------
+Loading data pack...
+Spawning entities (limit=100, species=['sp-001-drifter'])...
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0000
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0001
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0002
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0003
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0004
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0005
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0006
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0007
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0008
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0009
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0010
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0011
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0012
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0013
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0014
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0015
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0016
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0017
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0018
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0019
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0020
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0021
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0022
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0023
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0024
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0025
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0026
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0027
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0028
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0029
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0030
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0031
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0032
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0033
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0034
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0035
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0036
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0037
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0038
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0039
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0040
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0041
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0042
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0043
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0044
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0045
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0046
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0047
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0048
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0049
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0050
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0051
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0052
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0053
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0054
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0055
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0056
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0057
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0058
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0059
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0060
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0061
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0062
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0063
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0064
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0065
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0066
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0067
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0068
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0069
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0070
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0071
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0072
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0073
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0074
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0075
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0076
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0077
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0078
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0079
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0080
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0081
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0082
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0083
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0084
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0085
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0086
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0087
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0088
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0089
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0090
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0091
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0092
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0093
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0094
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0095
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0096
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0097
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0098
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0099
+  Vent Field Alpha: spawned 100 entities
+[OK] Simulation initialized: 100 entities, dt=1.0s, seed=12345
+Entities: 100
+Total time: 0.524s
+Average tick: 5.232ms
+
+[RUN 2] USE_CKDTREE=True (cKDTree backend)
+------------------------------------------------------------
+Loading data pack...
+Spawning entities (limit=100, species=['sp-001-drifter'])...
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0000
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0001
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0002
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0003
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0004
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0005
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0006
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0007
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0008
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0009
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0010
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0011
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0012
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0013
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0014
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0015
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0016
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0017
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0018
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0019
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0020
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0021
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0022
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0023
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0024
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0025
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0026
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0027
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0028
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0029
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0030
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0031
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0032
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0033
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0034
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0035
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0036
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0037
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0038
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0039
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0040
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0041
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0042
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0043
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0044
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0045
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0046
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0047
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0048
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0049
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0050
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0051
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0052
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0053
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0054
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0055
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0056
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0057
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0058
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0059
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0060
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0061
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0062
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0063
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0064
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0065
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0066
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0067
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0068
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0069
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0070
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0071
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0072
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0073
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0074
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0075
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0076
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0077
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0078
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0079
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0080
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0081
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0082
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0083
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0084
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0085
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0086
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0087
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0088
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0089
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0090
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0091
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0092
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0093
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0094
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0095
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0096
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0097
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0098
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0099
+  Vent Field Alpha: spawned 100 entities
+[OK] Simulation initialized: 100 entities, dt=1.0s, seed=12345
+Entities: 100
+Total time: 0.571s
+Average tick: 5.703ms
+
+[COMPARISON]
+------------------------------------------------------------
+Max position difference: 0.000000000000m
+Max velocity difference: 0.000000000000m/s
+Behavior mismatches: 0
+
+O(n) time: 0.524s (5.232ms/tick)
+cKDTree time: 0.571s (5.703ms/tick)
+Speedup: 0.92x
+Improvement: -9.0%
+
+[WARN] Minimal speedup (0.92x), cKDTree may not be effective
+
+[OK] Determinism verified - results identical
+
+============================================================
+A/B Comparison Test: O(n) vs cKDTree (500 entities)
+============================================================
+
+[RUN 1] USE_CKDTREE=False (O(n) fallback)
+------------------------------------------------------------
+Loading data pack...
+Spawning entities (limit=500, species=['sp-001-drifter'])...
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0000
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0001
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0002
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0003
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0004
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0005
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0006
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0007
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0008
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0009
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0010
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0011
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0012
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0013
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0014
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0015
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0016
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0017
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0018
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0019
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0020
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0021
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0022
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0023
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0024
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0025
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0026
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0027
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0028
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0029
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0030
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0031
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0032
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0033
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0034
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0035
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0036
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0037
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0038
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0039
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0040
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0041
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0042
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0043
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0044
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0045
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0046
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0047
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0048
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0049
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0050
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0051
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0052
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0053
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0054
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0055
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0056
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0057
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0058
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0059
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0060
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0061
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0062
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0063
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0064
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0065
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0066
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0067
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0068
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0069
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0070
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0071
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0072
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0073
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0074
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0075
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0076
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0077
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0078
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0079
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0080
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0081
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0082
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0083
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0084
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0085
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0086
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0087
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0088
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0089
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0090
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0091
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0092
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0093
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0094
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0095
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0096
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0097
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0098
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0099
+  Vent Field Alpha: spawned 100 entities
+[OK] Simulation initialized: 100 entities, dt=1.0s, seed=12345
+Entities: 100
+Total time: 0.521s
+Average tick: 5.207ms
+
+[RUN 2] USE_CKDTREE=True (cKDTree backend)
+------------------------------------------------------------
+Loading data pack...
+Spawning entities (limit=500, species=['sp-001-drifter'])...
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0000
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0001
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0002
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0003
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0004
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0005
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0006
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0007
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0008
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0009
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0010
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0011
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0012
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0013
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0014
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0015
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0016
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0017
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0018
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0019
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0020
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0021
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0022
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0023
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0024
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0025
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0026
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0027
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0028
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0029
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0030
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0031
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0032
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0033
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0034
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0035
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0036
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0037
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0038
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0039
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0040
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0041
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0042
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0043
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0044
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0045
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0046
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0047
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0048
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0049
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0050
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0051
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0052
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0053
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0054
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0055
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0056
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0057
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0058
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0059
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0060
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0061
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0062
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0063
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0064
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0065
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0066
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0067
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0068
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0069
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0070
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0071
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0072
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0073
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0074
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0075
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0076
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0077
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0078
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0079
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0080
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0081
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0082
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0083
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0084
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0085
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0086
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0087
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0088
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0089
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0090
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0091
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0092
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0093
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0094
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0095
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0096
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0097
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0098
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0099
+  Vent Field Alpha: spawned 100 entities
+[OK] Simulation initialized: 100 entities, dt=1.0s, seed=12345
+Entities: 100
+Total time: 0.528s
+Average tick: 5.278ms
+
+[COMPARISON]
+------------------------------------------------------------
+Max position difference: 0.000000000000m
+Max velocity difference: 0.000000000000m/s
+Behavior mismatches: 0
+
+O(n) time: 0.521s (5.207ms/tick)
+cKDTree time: 0.528s (5.278ms/tick)
+Speedup: 0.99x
+Improvement: -1.4%
+
+[WARN] Minimal speedup (0.99x), cKDTree may not be effective
+
+[OK] Determinism verified - results identical
+
+============================================================
+A/B Comparison Test: O(n) vs cKDTree (1000 entities)
+============================================================
+
+[RUN 1] USE_CKDTREE=False (O(n) fallback)
+------------------------------------------------------------
+Loading data pack...
+Spawning entities (limit=1000, species=['sp-001-drifter'])...
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0000
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0001
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0002
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0003
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0004
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0005
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0006
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0007
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0008
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0009
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0010
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0011
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0012
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0013
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0014
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0015
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0016
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0017
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0018
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0019
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0020
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0021
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0022
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0023
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0024
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0025
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0026
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0027
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0028
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0029
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0030
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0031
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0032
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0033
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0034
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0035
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0036
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0037
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0038
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0039
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0040
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0041
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0042
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0043
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0044
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0045
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0046
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0047
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0048
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0049
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0050
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0051
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0052
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0053
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0054
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0055
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0056
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0057
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0058
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0059
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0060
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0061
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0062
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0063
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0064
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0065
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0066
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0067
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0068
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0069
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0070
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0071
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0072
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0073
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0074
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0075
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0076
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0077
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0078
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0079
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0080
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0081
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0082
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0083
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0084
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0085
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0086
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0087
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0088
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0089
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0090
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0091
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0092
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0093
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0094
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0095
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0096
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0097
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0098
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0099
+  Vent Field Alpha: spawned 100 entities
+[OK] Simulation initialized: 100 entities, dt=1.0s, seed=12345
+Entities: 100
+Total time: 0.607s
+Average tick: 6.067ms
+
+[RUN 2] USE_CKDTREE=True (cKDTree backend)
+------------------------------------------------------------
+Loading data pack...
+Spawning entities (limit=1000, species=['sp-001-drifter'])...
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0000
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0001
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0002
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0003
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0004
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0005
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0006
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0007
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0008
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0009
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0010
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0011
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0012
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0013
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0014
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0015
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0016
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0017
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0018
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0019
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0020
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0021
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0022
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0023
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0024
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0025
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0026
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0027
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0028
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0029
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0030
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0031
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0032
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0033
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0034
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0035
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0036
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0037
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0038
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0039
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0040
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0041
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0042
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0043
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0044
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0045
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0046
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0047
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0048
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0049
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0050
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0051
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0052
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0053
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0054
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0055
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0056
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0057
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0058
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0059
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0060
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0061
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0062
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0063
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0064
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0065
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0066
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0067
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0068
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0069
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0070
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0071
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0072
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0073
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0074
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0075
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0076
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0077
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0078
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0079
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0080
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0081
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0082
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0083
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0084
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0085
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0086
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0087
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0088
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0089
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0090
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0091
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0092
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0093
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0094
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0095
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0096
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0097
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0098
+[WARN] Clustered distribution not implemented, using uniform for sp-001-drifter-biome-vent-field-alpha-0099
+  Vent Field Alpha: spawned 100 entities
+[OK] Simulation initialized: 100 entities, dt=1.0s, seed=12345
+Entities: 100
+Total time: 0.569s
+Average tick: 5.684ms
+
+[COMPARISON]
+------------------------------------------------------------
+Max position difference: 0.000000000000m
+Max velocity difference: 0.000000000000m/s
+Behavior mismatches: 0
+
+O(n) time: 0.607s (6.067ms/tick)
+cKDTree time: 0.569s (5.684ms/tick)
+Speedup: 1.07x
+Improvement: 6.3%
+
+[WARN] Minimal speedup (1.07x), cKDTree may not be effective
+
+[OK] Determinism verified - results identical
+
+
+============================================================
+[PASS] All A/B comparison tests passed!
+============================================================
