@@ -22,9 +22,11 @@ from .constants import (
     USE_CKDTREE,
     CKDTREE_LEAFSIZE,
     VENT_THERMAL_BASE_DELTA,
-    INFLUENCE_RADIUS_FACTOR_DEFAULT
+    INFLUENCE_RADIUS_FACTOR_DEFAULT,
+    USE_GOSSIP
 )
 from .spatial_queries import SpatialIndexAdapter
+from .gossip import exchange_tokens
 
 
 class AquariumSimulation:
@@ -85,6 +87,9 @@ class AquariumSimulation:
         self._avoidance_sphere_times: List[float] = []
         self._avoidance_cylinder_times: List[float] = []
         self._avoidance_plane_times: List[float] = []
+
+        # Phase B.5 timing (gossip)
+        self._gossip_times: List[float] = []
 
         # Phase 6 timing (sensor queries)
         self._sensor_times: List[float] = []
@@ -461,6 +466,35 @@ class AquariumSimulation:
         movement_elapsed = time.perf_counter() - movement_start
         self._movement_times.append(movement_elapsed)
 
+        # ============================================================
+        # PHASE B.5: KNOWLEDGE GOSSIP (after movement, rebuild spatial index)
+        # ============================================================
+        # Entities exchange knowledge tokens with nearby entities
+        # Requires spatial index rebuild since positions changed in Phase B
+
+        if USE_GOSSIP and evaluate_behaviors:
+            gossip_start = time.perf_counter()
+
+            # Rebuild spatial index with post-movement positions for gossip queries
+            self._ensure_position_capacity(len(all_entities))
+            self._count = len(all_entities)
+            for i, entity in enumerate(all_entities):
+                self._positions[i] = entity.position
+
+            self.spatial.build(
+                self._positions[:self._count],
+                refs=all_entities,
+                thermal_centers=self._thermal_centers,
+                thermal_base_deltas=self._thermal_base_deltas,
+                thermal_influences=self._thermal_influences
+            )
+
+            # Exchange knowledge tokens (vectorized, radius-based, push-pull)
+            gossip_result = exchange_tokens(self.entities, self.spatial, self.species_registry)
+
+            gossip_elapsed = time.perf_counter() - gossip_start
+            self._gossip_times.append(gossip_elapsed)
+
         # Increment tick count
         self.tick_count += 1
 
@@ -593,6 +627,7 @@ class AquariumSimulation:
         avg_avoidance = sum(self._avoidance_times[-window:]) / window * 1000.0 if self._avoidance_times else 0.0
         avg_sensor = sum(self._sensor_times[-window:]) / window * 1000.0 if self._sensor_times else 0.0
         avg_movement = sum(self._movement_times[-window:]) / window * 1000.0
+        avg_gossip = sum(self._gossip_times[-window:]) / window * 1000.0 if self._gossip_times else 0.0
         avg_total = sum(self._tick_times[-window:]) / window * 1000.0
 
         print(f"\n[Perf Breakdown] Tick {self.tick_count} ({len(self.entities)} entities)")
@@ -613,5 +648,6 @@ class AquariumSimulation:
 
         print(f"  Sensor:       {avg_sensor:6.3f} ms")
         print(f"  Movement:     {avg_movement:6.3f} ms")
+        print(f"  Gossip:       {avg_gossip:6.3f} ms")
         print(f"  Total:        {avg_total:6.3f} ms")
-        print(f"  Overhead:     {(avg_total - avg_build_main - avg_build_tag - avg_batch_query - avg_behavior - avg_avoidance - avg_sensor - avg_movement):6.3f} ms")
+        print(f"  Overhead:     {(avg_total - avg_build_main - avg_build_tag - avg_batch_query - avg_behavior - avg_avoidance - avg_sensor - avg_movement - avg_gossip):6.3f} ms")
