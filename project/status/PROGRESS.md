@@ -48,13 +48,18 @@ Last Updated: 2025-09-30
 - Schema/YAML drift risk — keep emission multipliers and depth range conventions aligned.
 
 **Next**
+- Knowledge Gossip Phase 2 (Lifecycle):
+  - Exponential decay (freshness/reliability) per tick from tokens.yaml rates
+  - Capacity enforcement (cap=16 default) with deterministic eviction (stalest first)
+  - Reliability attenuation during propagation (per-kind from tokens.yaml)
+  - Extend schema: add reliability field, update SoA cache
+  - Tests: test_gossip_lifecycle.py (decay curves, eviction, attenuation, determinism)
+  - Performance target: maintain p50 <2ms @ 1000 entities
+  - Design: project/plans/gossip_phase2_lifecycle_design.md
 - Sensor channels (Step 2 & 3):
-  - Acoustic + bioluminescent fields; add `optical_*` alias with `optical_components=['bioluminescent']`; scale via behavior multipliers; clamp ranges.
   - Thermal via nearest‑vent radial falloff (use `thermal_base_delta` on vent spheres; fallback constant).
   - Extend tests for scaling, flags, falloff; keep `sensor_ms` within target.
-- Knowledge gossip + decay:
-  - neighbors_within via adapter; cap exchanges; decay → evict; enforce token capacity; propagation test ≥95% coverage by T.
-- Performance validation at 143/500/1000 with channels and gossip enabled; log breakdowns every 200 ticks.
+- Performance validation at 143/500/1000 with channels and gossip lifecycle enabled; log breakdowns every 200 ticks.
 
 Spatial Adapter API
 - Locked for Phase 4; see `project/docs/SPATIAL_ADAPTER_API.md` for function signatures and DTOs.
