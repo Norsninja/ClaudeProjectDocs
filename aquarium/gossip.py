@@ -78,6 +78,11 @@ def _load_token_definitions_at_import() -> Dict:
 _TOKEN_DEFINITIONS = _load_token_definitions_at_import()
 
 
+# Module-level cache for per-row gossip ranges (keyed by adapter + build_seq)
+# Cache entry: {'build_seq': int, 'range_by_row': np.ndarray, 'uniform': bool, 'max_range': float}
+_RANGE_CACHE: Dict[int, Dict] = {}  # keyed by id(adapter)
+
+
 # Performance profiling support (enabled via GOSSIP_PROFILE=1)
 class _GossipTimer:
     """
@@ -186,31 +191,45 @@ def exchange_tokens(
 
     # Build undirected edge set using radius-based neighbor queries
     with timer.time('edge_query'):
-        # Note: We still group by range, but use query_ball_point instead of k-NN
-        range_groups = defaultdict(list)
-        for row, entity in enumerate(adapter._entities):
-            species = species_registry.get(entity.species_id)
-            gossip_range = GOSSIP_FALLBACK_RANGE_M
-            if species and hasattr(species, 'gossip_range_m') and species.gossip_range_m is not None:
-                gossip_range = species.gossip_range_m
+        # Get or compute per-row gossip ranges (cached by adapter build_seq)
+        adapter_id = id(adapter)
+        cache_entry = _RANGE_CACHE.get(adapter_id)
 
-            if gossip_range > 0:
-                range_groups[gossip_range].append(row)
+        # Check cache validity (build_seq mismatch = adapter rebuilt)
+        if cache_entry is None or cache_entry['build_seq'] != adapter._build_seq:
+            # Rebuild cache: compute per-row ranges from species registry
+            range_by_row = np.full(N, GOSSIP_FALLBACK_RANGE_M, dtype=np.float64)
+            for row, entity in enumerate(adapter._entities):
+                species = species_registry.get(entity.species_id)
+                if species and hasattr(species, 'gossip_range_m') and species.gossip_range_m is not None:
+                    range_by_row[row] = species.gossip_range_m
 
-        # PERFORMANCE FIX: Use query_pairs instead of query_ball_point
-        # query_pairs returns undirected pairs (i, j) with i < j, already canonical and unique
-        # This eliminates query_ball_point overhead and all deduplication logic
+            # Check if all ranges are uniform (common case: all use fallback)
+            uniform = bool(np.all(range_by_row == range_by_row[0]))
+            max_range = float(np.max(range_by_row))
 
-        # For multiple gossip ranges: use max range (all entities in same range group)
-        # Most simulations have uniform ranges, so this is typically exact
-        if not range_groups:
+            # Cache for next tick
+            _RANGE_CACHE[adapter_id] = {
+                'build_seq': adapter._build_seq,
+                'range_by_row': range_by_row,
+                'uniform': uniform,
+                'max_range': max_range
+            }
+            cache_entry = _RANGE_CACHE[adapter_id]
+
+        max_range = cache_entry['max_range']
+        if max_range <= 0:
             return {'exchanges_count': 0, 'pairs_count': 0}
 
-        max_range = max(range_groups.keys())
-
-        # Get all unique pairs within max range (ndarray shape (n_pairs, 2), already sorted)
-        # PERFORMANCE: This is the hot path - one fast C++ call, no Python loops
-        all_pairs = adapter._tree.query_pairs(r=max_range, output_type='ndarray')
+        # Uniform-range fast path: single query_pairs call, no filtering
+        # (Most simulations use uniform 15m fallback, so this is the hot path)
+        if cache_entry['uniform']:
+            all_pairs = adapter._tree.query_pairs(r=max_range, output_type='ndarray')
+        else:
+            # Heterogeneous ranges: query max, then filter by min(range[i], range[j])
+            # (Deferred until species actually have varying ranges)
+            all_pairs = adapter._tree.query_pairs(r=max_range, output_type='ndarray')
+            # TODO: Vectorized distance filter when heterogeneous ranges needed
 
         if len(all_pairs) == 0:
             return {'exchanges_count': 0, 'pairs_count': 0}
