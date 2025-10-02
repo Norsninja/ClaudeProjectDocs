@@ -116,5 +116,68 @@ Knowledge gossip v2 fully implemented and tested (median 1.9ms @ 1000 entities, 
 
 ---
 
+## Session 011 Continuation - Performance Optimizations Complete
+
+**Date**: 2025-10-02 (continued)
+**Final Status**: ✅ **All Complete - Ready for Merge**
+
+### Additional Commits (Post-Handoff):
+
+**Commit 2: Uniform-Range Fast Path**
+- Cached per-row gossip ranges keyed by `adapter._build_seq`
+- Eliminated per-tick range grouping loop
+- Added generic `SpatialIndexAdapter._build_seq` counter
+- Performance: edge_query 1.1ms → 0.67ms (~0.3ms improvement)
+
+**Commit 3: SoA Token State Cache**
+- Cached token arrays (has/val/version/last_tick) keyed by adapter + build_seq
+- Eliminated per-tick Python entity loop on steady state
+- Generation-based cache invalidation (automatic on adapter.build())
+- Performance: extract 0.95ms → 0.41ms (~0.55ms improvement)
+
+### Final Performance (All Optimizations):
+
+| Metric | Baseline | After Commit 2 | After Commit 3 | Target |
+|--------|----------|----------------|----------------|--------|
+| p50 | 2.0-2.6ms | 2.0ms | **1.6ms** ✓ | <2.2ms |
+| p90 | 2.8-6.8ms | 2.5ms | **2.2ms** ✓ | informational |
+| Profiled | 1.98ms | ~1.5ms | **1.29ms** ✓ | <2ms |
+
+**Profiled Breakdown (GOSSIP_PROFILE=1 @ 1000 entities):**
+```
+extract:     0.41ms (31%)  ← optimized from 0.95ms via SoA cache
+edge_query:  0.60ms (46%)  ← optimized from 1.1ms via uniform-range
+merge:       0.15ms (11%)  ← vectorized, already optimal
+writeback:   0.14ms (11%)  ← already optimal
+───────────────────────────
+Total:       1.29ms        ← 35% faster than baseline!
+```
+
+### Test Results:
+✅ All 5 tests passing consistently (multiple runs verified)
+✅ Performance: p50 1.6ms < 2.2ms threshold (stable)
+✅ Variance reduced: 1.5-2.2ms range (was 1.6-2.6ms)
+✅ No test threshold adjustments needed (authentic passing)
+
+### Architecture:
+- ✅ Lean adapter (only generic `_build_seq`, no gossip-specific fields)
+- ✅ Gossip caches in `aquarium/gossip.py` (range cache + SoA token state cache)
+- ✅ Generation-based invalidation (tied to `adapter._build_seq`)
+- ✅ Zero per-tick Python loops on steady state (cache hits)
+- ✅ Future-ready for heterogeneous ranges (vectorized filter path noted)
+
+### Branch Status:
+- Branch: `feature/knowledge-gossip`
+- Commits: 3 (baseline + 2 optimizations)
+- Ready for: Merge to main + milestone tag
+
+### Migration Notes:
+- Token schema v2: `{kind, value, version, last_tick, source}`
+- Legacy tokens treated as version=0, last_tick=0.0 (backward compatible)
+- No external consumer impact (internal only in Phase 1)
+
+---
+
 _Handoff prepared by Chronus Session 011_
-_Knowledge gossip v2 complete, one test threshold discussion pending_
+_Knowledge gossip v2 Phase 1: **COMPLETE** ✅_
+_Performance target met: **1.3ms profiled** (35% under 2ms budget)_

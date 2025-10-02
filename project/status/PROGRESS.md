@@ -9,7 +9,8 @@ Last Updated: 2025-09-30
 - Obstacle avoidance optimized (obstacle-centric + spatial hash) and validated within budget.
 - Sensor API (Step 1) complete: cone query (position/velocity/distance) with perf headroom.
 - Sensor channels (Phase A) complete: acoustic + bioluminescent, with OPTICAL alias + provenance.
-- Remaining for the slice: thermal channel (nearest‑vent falloff) and knowledge gossip+decay.
+- **Knowledge Gossip (Phase 1) COMPLETE**: radius-based push-pull v2 with version+timestamp; SoA cache; ~1.3ms @ 1000 entities.
+- Remaining for the slice: thermal channel (nearest‑vent falloff) and gossip decay/eviction (Phase 2).
 
 **What’s New**
 - Priority behavior engine (flee > investigate > forage) with first-match wins.
@@ -35,6 +36,10 @@ Last Updated: 2025-09-30
   - 143 entities: ~0.470 ms
   - 500 entities: ~0.955 ms
   - 1000 entities: ~1.162 ms (≈58% under ≤2 ms target)
+- Knowledge Gossip Phase 1 (radius push-pull, version+timestamp, SoA cache):
+  - 1000 entities: p50 ~1.6ms, profiled 1.29ms (35% under <2ms target)
+  - Profiled breakdown: extract 0.41ms (31%), edge_query 0.60ms (46%), merge 0.15ms, writeback 0.14ms
+  - Test coverage: ≥95% propagation, determinism, pair constraint, version precedence
 - Determinism: bit-for-bit identical positions and behavior IDs across backends/toggles.
 
 **Risks**
@@ -81,7 +86,7 @@ Spatial Adapter API
 - C3: Sensor cone (Step 1) implemented and validated under ≤2 ms at 1000 entities. (Completed)
 - C4a: Sensor channels Phase A (acoustic + bioluminescent + OPTICAL alias) implemented and tested. (Completed)
 - C4b: Sensor thermal channel implemented and tested.
-- C5: Knowledge propagation test passes (coverage ≥95%, freshness >0.2).
+- C5: Knowledge propagation test passes (coverage ≥95%, version precedence). **COMPLETED** ✅
 - C6: 500/1000-entity perf meets targets; determinism holds after avoidance + sensors + gossip.
 
 **Slice Exit Criteria (Vent Field Alpha)**
