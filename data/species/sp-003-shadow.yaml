@@ -1,0 +1,66 @@
+# Shadow - Large predator (MVP stub)
+# Minimal behavior for MVP: territorial patrolling, no active hunting yet
+
+species_id: sp-003-shadow
+name: Shadow
+description: >
+  Large predatory organism, 8-12 meters in length.
+  Thermal signature suggests endothermic physiology (rare in Titan's ocean).
+  Avoids light, territorial near thermal vents.
+  Player encounters have been aggressive but not sustained.
+
+tags:
+  - mobile
+  - predator
+  - territorial
+  - carnivore
+
+parameters:
+  territory_radius: 150.0
+  patrol_speed: 0.6
+
+physical:
+  size_range:
+    min_meters: 8.0
+    max_meters: 12.0
+  mass_kg: 300.0
+  personal_space: 20.0  # Large personal space
+  avoidance_weight: 0.8  # Stronger obstacle avoidance (careful movements)
+
+emissions:
+  acoustic:
+    peak_hz: 80
+    bandwidth_hz: 40
+    amplitude: 0.8  # Low-frequency rumble
+  thermal:
+    delta_celsius: 2.0  # Strong endothermic signature
+  chemical:
+    compound: predator_pheromone
+    concentration: 0.5
+  magnetic:
+    delta_microtesla: 0.2  # Biomagnetic sense organs
+
+movement:
+  max_speed_ms: 15.0  # Fast when needed
+  acceleration_ms2: 3.0
+  turn_rate_deg_s: 60.0  # Slower turns (large body)
+  depth_range:
+    shallow_limit_meters: -50.0  # Shallowest: 50m below surface
+    deep_limit_meters: -300.0    # Deepest: 300m below surface
+
+behaviors:
+  # Priority 1: Patrol territory (MVP simplified - just slow forage)
+  # Post-MVP: Add territorial aggression, pursuit behaviors
+  - id: patrol-territory
+    priority: 1
+    conditions: []
+    action:
+      type: forage  # MVP: treat as slow patrol
+      speed_multiplier: 0.6  # {parameters.patrol_speed}
+      emission_multipliers:
+        acoustic: 1.2  # Slightly louder (territorial assertion)
+        thermal: 1.0
+
+knowledge:
+  gossip_range: 0.0  # Solitary, does not share knowledge
+  token_capacity: 5  # Limited social memory

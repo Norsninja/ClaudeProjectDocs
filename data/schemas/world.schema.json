@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shipmind.game/schemas/world.schema.json",
+  "title": "World Definition",
+  "description": "Defines planet-level configuration and biome registry for the aquarium simulation.",
+  "type": "object",
+  "required": ["world_id", "name", "parameters", "biomes"],
+  "properties": {
+    "world_id": {
+      "type": "string",
+      "pattern": "^world-[a-z0-9-]+$",
+      "description": "Unique world identifier (e.g., world-titan)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable world name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional flavor text"
+    },
+    "parameters": {
+      "type": "object",
+      "required": ["gravity_ms2", "fluid_density_kgm3", "ambient_temperature_c"],
+      "properties": {
+        "seed": {
+          "type": "integer",
+          "description": "World generation seed (optional, defaults to random). Propagates to biomes."
+        },
+        "gravity_ms2": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Gravitational acceleration (m/s²)"
+        },
+        "fluid_density_kgm3": {
+          "type": "number",
+          "minimum": 1.0,
+          "description": "Fluid density (kg/m³, water = 1000)"
+        },
+        "ambient_temperature_c": {
+          "type": "number",
+          "description": "Baseline water temperature (°C)"
+        },
+        "current_speed_ms": {
+          "type": "number",
+          "minimum": 0.0,
+          "default": 0.0,
+          "description": "Global current speed (m/s, uniform for MVP)"
+        },
+        "current_direction_deg": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 360.0,
+          "default": 0.0,
+          "description": "Global current bearing (degrees, 0 = north)"
+        }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "description": "Simulation global defaults",
+      "properties": {
+        "tick_delta_seconds": {
+          "type": "number",
+          "minimum": 0.01,
+          "default": 1.0,
+          "description": "Fixed time step per tick (seconds)"
+        },
+        "active_region_radius": {
+          "type": "number",
+          "minimum": 100.0,
+          "default": 2000.0,
+          "description": "Active simulation radius around player (meters)"
+        },
+        "influence_radius_factor": {
+          "type": "number",
+          "minimum": 1.0,
+          "default": 2.5,
+          "description": "Obstacle influence = radius × this factor"
+        },
+        "avoidance_weight": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.6,
+          "description": "Default obstacle avoidance strength"
+        },
+        "seabed_influence_distance": {
+          "type": "number",
+          "minimum": 0.1,
+          "default": 5.0,
+          "description": "Default seabed push-up distance (meters)"
+        }
+      }
+    },
+    "biomes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["biome_id", "file_path"],
+        "properties": {
+          "biome_id": {
+            "type": "string",
+            "description": "Reference to biome definition"
+          },
+          "file_path": {
+            "type": "string",
+            "description": "Relative path to biome YAML file"
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Load this biome at startup"
+          }
+        }
+      },
+      "description": "Registry of available biomes"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shipmind.game/schemas/biome.schema.json",
+  "title": "Biome Definition",
+  "description": "Defines a biome's spatial features, obstacles, and spawning parameters for the aquarium simulation.",
+  "type": "object",
+  "required": ["biome_id", "name", "bounds", "obstacles"],
+  "properties": {
+    "biome_id": {
+      "type": "string",
+      "pattern": "^biome-[a-z0-9-]+$",
+      "description": "Unique biome identifier (e.g., biome-vent-field-alpha)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable biome name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional flavor text"
+    },
+    "seed": {
+      "type": "integer",
+      "description": "Biome-specific generation seed (optional, derived from world seed if absent)"
+    },
+    "bounds": {
+      "type": "object",
+      "required": ["center", "radius"],
+      "properties": {
+        "center": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Biome center [x, y, z] in meters"
+        },
+        "radius": {
+          "type": "number",
+          "minimum": 10.0,
+          "description": "Biome radius (meters, spherical approximation)"
+        }
+      }
+    },
+    "obstacles": {
+      "type": "object",
+      "properties": {
+        "spheres": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "center", "radius"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$",
+                "description": "Obstacle identifier"
+              },
+              "center": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3,
+                "description": "Sphere center [x, y, z]"
+              },
+              "radius": {
+                "type": "number",
+                "minimum": 0.1,
+                "description": "Sphere radius (meters)"
+              },
+              "influence_radius": {
+                "type": "number",
+                "minimum": 0.1,
+                "description": "Avoidance influence radius (meters). If omitted, defaults to radius × world.simulation.influence_radius_factor (2.5)."
+              }
+            }
+          },
+          "description": "Spherical obstacles (e.g., hydrothermal vents)"
+        },
+        "cylinders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "start", "end", "radius"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "start": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3,
+                "description": "Cylinder start point [x, y, z]"
+              },
+              "end": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3,
+                "description": "Cylinder end point [x, y, z]"
+              },
+              "radius": {
+                "type": "number",
+                "minimum": 0.1,
+                "description": "Cylinder radius (meters)"
+              },
+              "influence_radius": {
+                "type": "number",
+                "minimum": 0.1,
+                "description": "Avoidance influence radius (meters). If omitted, defaults to radius × world.simulation.influence_radius_factor."
+              }
+            }
+          },
+          "description": "Cylindrical obstacles (e.g., ridges)"
+        },
+        "planes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "type"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["seabed"],
+                "description": "Plane type (currently only seabed)"
+              },
+              "y_level": {
+                "type": "number",
+                "description": "Y coordinate of plane (for seabed)"
+              },
+              "influence_distance": {
+                "type": "number",
+                "minimum": 0.1,
+                "default": 5.0,
+                "description": "Distance above plane where push force applies (meters)"
+              }
+            }
+          },
+          "description": "Planar obstacles (e.g., ocean floor)"
+        }
+      },
+      "description": "Collision avoidance primitives"
+    },
+    "spawning": {
+      "type": "object",
+      "description": "Species spawning configuration (optional, hand-author for MVP)",
+      "properties": {
+        "species": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["species_id", "count"],
+            "properties": {
+              "species_id": {
+                "type": "string",
+                "description": "Reference to species definition"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of entities to spawn"
+              },
+              "distribution": {
+                "type": "string",
+                "enum": ["uniform", "clustered", "near_obstacles"],
+                "default": "uniform",
+                "description": "Spatial distribution pattern"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

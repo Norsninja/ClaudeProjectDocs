@@ -1,0 +1,120 @@
+# Drifter - Mobile bioluminescent species (MVP complete)
+# Based on paper prototype encounter (Session 001, Turns 47-57)
+
+species_id: sp-001-drifter
+name: Drifter
+description: >
+  Bioluminescent mobile organism, 2-4 meters in length.
+  Curious and social, communicates via acoustic clicks and light pulses.
+  Inhabits mid-water column near thermal vents, feeds on organic particulates.
+
+tags:
+  - mobile
+  - bioluminescent
+  - social
+  - prey
+
+parameters:
+  predator_detect_range: 80.0
+  ship_hostile_distance: 150.0
+  ship_investigate_distance: 300.0
+  flee_speed_multiplier: 1.5
+  investigate_speed_multiplier: 1.0
+  forage_speed_multiplier: 0.8
+
+physical:
+  size_range:
+    min_meters: 2.0
+    max_meters: 4.0
+  mass_kg: 15.0
+  personal_space: 2.0  # Comfortable spacing from conspecifics
+  avoidance_weight: 0.6  # Default obstacle avoidance
+
+emissions:
+  acoustic:
+    peak_hz: 1000
+    bandwidth_hz: 400
+    amplitude: 0.6
+  thermal:
+    delta_celsius: 0.1  # Slightly warmer than ambient (ectothermic but active)
+  chemical:
+    compound: organic_trace
+    concentration: 0.2
+  bioluminescent:
+    intensity: 0.4
+    wavelength_nm: 480  # Blue bioluminescence
+
+movement:
+  max_speed_ms: 10.0  # Burst speed when fleeing
+  acceleration_ms2: 2.0
+  turn_rate_deg_s: 120.0
+  depth_range:
+    shallow_limit_meters: -20.0  # Shallowest: 20m below surface
+    deep_limit_meters: -200.0    # Deepest: 200m below surface
+
+behaviors:
+  # Priority 1: Flee from predators (immediate danger)
+  - id: flee-predator
+    priority: 1
+    conditions:
+      - type: nearest_entity
+        tag: predator
+        max_distance: 80.0  # {parameters.predator_detect_range}
+    action:
+      type: flee
+      speed_multiplier: 1.5  # {parameters.flee_speed_multiplier}
+      emission_multipliers:
+        acoustic: 0.3  # Quiet when fleeing
+        bioluminescent: 0.1  # Dim light to avoid detection
+
+  # Priority 2: Flee from hostile ship
+  - id: flee-hostile-ship
+    priority: 2
+    conditions:
+      - type: knowledge_token
+        token: ship_sentiment
+        operator: less_than
+        value: -0.5
+      - type: nearest_entity
+        tag: ship
+        max_distance: 150.0  # {parameters.ship_hostile_distance}
+    action:
+      type: flee
+      speed_multiplier: 1.5
+      emission_multipliers:
+        acoustic: 0.3
+        bioluminescent: 0.1
+
+  # Priority 3: Investigate friendly/neutral ship
+  - id: investigate-ship
+    priority: 3
+    conditions:
+      - type: nearest_entity
+        tag: ship
+        max_distance: 300.0  # {parameters.ship_investigate_distance}
+      # Optional: only if sentiment >= 0 (defaults to 0 if no token exists)
+      - type: knowledge_token
+        token: ship_sentiment
+        operator: greater_equal
+        value: 0.0
+    action:
+      type: investigate
+      speed_multiplier: 1.0  # {parameters.investigate_speed_multiplier}
+      emission_multipliers:
+        acoustic: 1.5  # Louder clicks (curiosity/communication)
+        bioluminescent: 2.0  # Bright display
+
+  # Priority 10: Default forage behavior
+  - id: forage
+    priority: 10
+    conditions: []  # Always valid (fallback)
+    action:
+      type: forage
+      speed_multiplier: 0.8  # {parameters.forage_speed_multiplier}
+      emission_multipliers:
+        acoustic: 1.0  # Normal baseline
+        bioluminescent: 1.0
+
+knowledge:
+  gossip_range: 50.0  # Exchanges knowledge tokens within 50m
+  token_capacity: 10  # Maximum stored knowledge tokens
