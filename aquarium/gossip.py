@@ -82,6 +82,12 @@ _TOKEN_DEFINITIONS = _load_token_definitions_at_import()
 # Cache entry: {'build_seq': int, 'range_by_row': np.ndarray, 'uniform': bool, 'max_range': float}
 _RANGE_CACHE: Dict[int, Dict] = {}  # keyed by id(adapter)
 
+# Module-level SoA cache for token state (keyed by adapter + build_seq)
+# Cache entry: {'build_seq': int, 'N': int, 'has': bool[N], 'val': float64[N],
+#               'version': int64[N], 'last_tick': float64[N]}
+# Eliminates per-tick entity loop on steady state (cache hit)
+_TOKEN_STATE_CACHE: Dict[int, Dict] = {}  # keyed by id(adapter)
+
 
 # Performance profiling support (enabled via GOSSIP_PROFILE=1)
 class _GossipTimer:
@@ -171,22 +177,51 @@ def exchange_tokens(
     EPSILON = 1e-12
 
     # Extract token state to arrays (FLOAT64, VERSION, LAST_TICK)
+    # SoA cache: reuse arrays on cache hit, skip per-entity Python loop
     with timer.time('extract'):
-        has = np.zeros(N, dtype=bool)
-        val = np.zeros(N, dtype=np.float64)       # FIX: was float32
-        version = np.zeros(N, dtype=np.int64)     # NEW: monotonic version counter
-        last_tick = np.zeros(N, dtype=np.float64) # NEW: timestamp for Phase 2 decay
+        adapter_id = id(adapter)
+        state_cache = _TOKEN_STATE_CACHE.get(adapter_id)
 
-        for row, entity in enumerate(adapter._entities):
-            token = entity.knowledge_tokens.get(kind)
-            if token is not None:
-                has[row] = True
-                val[row] = token['value']
-                # Compatibility shim: treat legacy tokens as version=0, last_tick=0.0
-                version[row] = token.get('version', 0)
-                last_tick[row] = token.get('last_tick', 0.0)
+        # Check cache validity (build_seq mismatch or N changed = adapter rebuilt)
+        cache_valid = (
+            state_cache is not None
+            and state_cache['build_seq'] == adapter._build_seq
+            and state_cache['N'] == N
+        )
 
-        # Get positions
+        if cache_valid:
+            # Cache hit: reuse arrays (steady state, no entity loop)
+            has = state_cache['has']
+            val = state_cache['val']
+            version = state_cache['version']
+            last_tick = state_cache['last_tick']
+        else:
+            # Cache miss: rebuild arrays from entities
+            has = np.zeros(N, dtype=bool)
+            val = np.zeros(N, dtype=np.float64)
+            version = np.zeros(N, dtype=np.int64)
+            last_tick = np.zeros(N, dtype=np.float64)
+
+            for row, entity in enumerate(adapter._entities):
+                token = entity.knowledge_tokens.get(kind)
+                if token is not None:
+                    has[row] = True
+                    val[row] = token['value']
+                    # Compatibility shim: treat legacy tokens as version=0, last_tick=0.0
+                    version[row] = token.get('version', 0)
+                    last_tick[row] = token.get('last_tick', 0.0)
+
+            # Store in cache for next tick
+            _TOKEN_STATE_CACHE[adapter_id] = {
+                'build_seq': adapter._build_seq,
+                'N': N,
+                'has': has,
+                'val': val,
+                'version': version,
+                'last_tick': last_tick
+            }
+
+        # Get positions (not cached, adapter already has efficient access)
         positions = np.array([e.position for e in adapter._entities], dtype=np.float64)
 
     # Build undirected edge set using radius-based neighbor queries
