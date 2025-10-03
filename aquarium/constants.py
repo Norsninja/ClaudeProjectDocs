@@ -83,8 +83,8 @@ GOSSIP_EXCHANGES_PER_ENTITY = 2
 # Fallback gossip range when Species.gossip_range_m is not specified
 GOSSIP_FALLBACK_RANGE_M = 15.0
 
-# Allowed token kinds for gossip (Phase 1: ship_sentiment only)
-GOSSIP_ALLOWED_KINDS = ['ship_sentiment']
+# Allowed token kinds for gossip (Phase 2a+: multi-kind support)
+GOSSIP_ALLOWED_KINDS = ['ship_sentiment', 'predator_location']
 
 # Minimum gossip neighbors threshold for diagnostics (warn if entity has fewer)
 MIN_GOSSIP_NEIGHBORS = 3
