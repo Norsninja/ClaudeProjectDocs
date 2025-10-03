@@ -92,6 +92,9 @@ MIN_GOSSIP_NEIGHBORS = 3
 # Token capacity per entity (Phase 2: lifecycle management)
 GOSSIP_TOKEN_CAP_DEFAULT = 16  # Max tokens per entity across all kinds
 
+# Logging interval for gossip network telemetry (ticks)
+GOSSIP_LOG_INTERVAL = 100  # Print degree histogram every 100 ticks
+
 
 # ============================================================================
 # Spawning Configuration

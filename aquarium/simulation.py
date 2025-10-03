@@ -23,7 +23,8 @@ from .constants import (
     CKDTREE_LEAFSIZE,
     VENT_THERMAL_BASE_DELTA,
     INFLUENCE_RADIUS_FACTOR_DEFAULT,
-    USE_GOSSIP
+    USE_GOSSIP,
+    GOSSIP_LOG_INTERVAL
 )
 from .spatial_queries import SpatialIndexAdapter
 from .gossip import exchange_tokens
@@ -90,6 +91,7 @@ class AquariumSimulation:
 
         # Phase B.5 timing (gossip)
         self._gossip_times: List[float] = []
+        self._gossip_telemetry: Optional[Dict] = None  # Latest telemetry from exchange_tokens
 
         # Phase 6 timing (sensor queries)
         self._sensor_times: List[float] = []
@@ -500,6 +502,9 @@ class AquariumSimulation:
             gossip_elapsed = time.perf_counter() - gossip_start
             self._gossip_times.append(gossip_elapsed)
 
+            # Store telemetry for network health diagnostics (Phase 7)
+            self._gossip_telemetry = gossip_result.get('telemetry')
+
         # Increment tick count
         self.tick_count += 1
 
@@ -654,5 +659,15 @@ class AquariumSimulation:
         print(f"  Sensor:       {avg_sensor:6.3f} ms")
         print(f"  Movement:     {avg_movement:6.3f} ms")
         print(f"  Gossip:       {avg_gossip:6.3f} ms")
+
+        # Print gossip network telemetry on GOSSIP_LOG_INTERVAL (Phase 7: network health EKG)
+        if USE_GOSSIP and self.tick_count % GOSSIP_LOG_INTERVAL == 0 and self._gossip_telemetry:
+            telemetry = self._gossip_telemetry
+            pct_isolated = 100.0 * telemetry['degree_histogram']['isolated'] / telemetry['total_entities']
+            pct_sparse = 100.0 * telemetry['degree_histogram']['sparse'] / telemetry['total_entities']
+            pct_connected = 100.0 * telemetry['degree_histogram']['connected'] / telemetry['total_entities']
+            print(f"  [Gossip Network] degree_mean={telemetry['degree_mean']:.2f} | "
+                  f"isolated={pct_isolated:.1f}% sparse={pct_sparse:.1f}% connected={pct_connected:.1f}%")
+
         print(f"  Total:        {avg_total:6.3f} ms")
         print(f"  Overhead:     {(avg_total - avg_build_main - avg_build_tag - avg_batch_query - avg_behavior - avg_avoidance - avg_sensor - avg_movement - avg_gossip):6.3f} ms")
