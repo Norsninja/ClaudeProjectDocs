@@ -12,6 +12,7 @@ Last Updated: 2025-10-03
 - **Knowledge Gossip (Phase 1) COMPLETE**: radius-based push-pull v2 with version+timestamp; SoA cache; ~1.3ms @ 1000 entities.
 - **Knowledge Gossip (Phase 2a) COMPLETE**: exponential decay, attenuation, capacity enforcement; p50 1.88ms @ 1000 entities.
 - **Knowledge Gossip (C7 Phase 4) COMPLETE**: Multi-kind support (ship_sentiment + predator_location); most_recent merge algorithm; position value_type; species-level capacity.
+- **Knowledge Gossip (Phase 7 Network Telemetry) COMPLETE**: Degree histogram (isolated/sparse/connected) with O(E) computation; logged every GOSSIP_LOG_INTERVAL ticks; test suite validated.
 
 **What’s New**
 - Priority behavior engine (flee > investigate > forage) with first-match wins.
@@ -63,10 +64,11 @@ Last Updated: 2025-10-03
     - Species-level capacity override (dict/object support, fallback to GOSSIP_TOKEN_CAP_DEFAULT=16)
     - Capacity skip optimization (skip loop when max_tokens ≤ min_cap)
     - Profiler accumulates per-kind times correctly
-  - Test coverage (19/19 passing):
+  - Test coverage (23/23 functional passing):
     - Phase 1: 5 tests (propagation, determinism, pair constraint, performance, freshness)
     - Phase 2a: 6 tests (decay, eviction, capacity, attenuation, determinism, propagation preserved)
     - C7 Phase 4: 8 tests (most_recent precedence ×3, position copy, attenuation, capacity, determinism, performance)
+    - Phase 7 Telemetry: 4 tests (API contract, two-node sanity, lattice layout, sparse layout)
 - Determinism: bit-for-bit identical positions and behavior IDs across backends/toggles.
 
 **Risks**
@@ -75,7 +77,6 @@ Last Updated: 2025-10-03
 - Schema/YAML drift risk — keep emission multipliers and depth range conventions aligned.
 
 **Next**
-- Network health telemetry: degree histogram logging every GOSSIP_LOG_INTERVAL ticks
 - Species gossip ranges: populate gossip_range_m in species YAMLs (currently using fallback 15m)
 - Optional optimizations (backlog):
   - Combine per-kind passes to reuse edge arrays in one sweep
@@ -116,6 +117,7 @@ Spatial Adapter API
 - C5: Knowledge propagation test passes (coverage ≥95%, version precedence). **COMPLETED** ✅
 - C6: Gossip Phase 2a lifecycle complete (decay, attenuation, eviction, capacity); perf p50 <2ms @ 1000. **COMPLETED** ✅
 - C7: Multi-kind tokens (ship_sentiment + predator_location); most_recent merge; position value_type. **COMPLETED** ✅
+- C7-Phase7: Network health telemetry (degree histogram) with O(E) computation; interval logging; test validation. **COMPLETED** ✅
 
 **Slice Exit Criteria (Vent Field Alpha)**
 - Avoidance: entities do not penetrate obstacles; speeds clamped; determinism intact; tests green.

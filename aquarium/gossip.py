@@ -449,7 +449,20 @@ def exchange_tokens(
 
     # Early exit if no KD-tree or no entities
     if adapter._tree is None or len(entities) == 0:
-        return {'exchanges_count': 0, 'pairs_count': 0}
+        N = len(entities) if entities else 0
+        return {
+            'exchanges_count': 0,
+            'pairs_count': 0,
+            'telemetry': {
+                'degree_mean': 0.0,
+                'degree_histogram': {
+                    'isolated': N,
+                    'sparse': 0,
+                    'connected': 0
+                },
+                'total_entities': N
+            }
+        }
 
     N = len(adapter._entities)
 
@@ -488,7 +501,19 @@ def exchange_tokens(
 
         max_range = cache_entry['max_range']
         if max_range <= 0:
-            return {'exchanges_count': 0, 'pairs_count': 0}
+            return {
+                'exchanges_count': 0,
+                'pairs_count': 0,
+                'telemetry': {
+                    'degree_mean': 0.0,
+                    'degree_histogram': {
+                        'isolated': N,
+                        'sparse': 0,
+                        'connected': 0
+                    },
+                    'total_entities': N
+                }
+            }
 
         # Uniform-range fast path: single query_pairs call, no filtering
         # (Most simulations use uniform 15m fallback, so this is the hot path)
@@ -636,12 +661,28 @@ def exchange_tokens(
     low_degree_mask = entity_degrees < MIN_GOSSIP_NEIGHBORS
     low_degree_count = np.sum(low_degree_mask)
 
+    # Compute degree histogram telemetry (Phase 7: network health EKG)
+    # Fast O(E) computation using entity_degrees already computed
+    degree_mean = float(entity_degrees.mean()) if N > 0 else 0.0
+    hist_isolated = int((entity_degrees == 0).sum())
+    hist_sparse = int(((entity_degrees >= 1) & (entity_degrees <= 2)).sum())
+    hist_connected = int((entity_degrees >= 3).sum())
+
     # Build result dict with optional profiling data
     result = {
         'exchanges_count': total_exchanges,
         'pairs_count': pairs_count,
         'low_degree_count': int(low_degree_count),
-        'avg_degree': float(np.mean(entity_degrees)) if N > 0 else 0.0
+        'avg_degree': degree_mean,
+        'telemetry': {
+            'degree_mean': degree_mean,
+            'degree_histogram': {
+                'isolated': hist_isolated,
+                'sparse': hist_sparse,
+                'connected': hist_connected
+            },
+            'total_entities': N
+        }
     }
 
     # Add profiling breakdown if enabled
