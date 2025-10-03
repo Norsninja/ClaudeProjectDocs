@@ -98,7 +98,7 @@ Spatial Adapter API
 - C2: Obstacle avoidance validated against vents/ridges/seabed; perf within budget at 1000 entities. (Completed)
 - C3: Sensor cone (Step 1) implemented and validated under ≤2 ms at 1000 entities. (Completed)
 - C4a: Sensor channels Phase A (acoustic + bioluminescent + OPTICAL alias) implemented and tested. (Completed)
-- C4b: Sensor thermal channel implemented and tested.
+- C4b: Sensor thermal channel implemented and tested. **COMPLETED** ✅
 - C5: Knowledge propagation test passes (coverage ≥95%, version precedence). **COMPLETED** ✅
 - C6: Gossip Phase 2a lifecycle complete (decay, attenuation, eviction, capacity); perf p50 <2ms @ 1000. **COMPLETED** ✅
 - C7: Multi-kind tokens (predator_location); network health telemetry; species range configs.
