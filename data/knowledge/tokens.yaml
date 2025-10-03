@@ -12,10 +12,10 @@ tokens:
     decay:
       freshness_rate: 0.01  # Decays slowly (10% per 10 seconds)
       reliability_rate: 0.005  # Reliability decays slower
-      eviction_threshold: 0.0  # Delete when freshness reaches 0
+      eviction_threshold: 0.0  # Staleness eviction disabled (capacity only)
     merge:
-      algorithm: weighted_average
-      weight_freshness: 0.6  # Fresher info weighted higher
+      algorithm: version_based  # Phase 2a: version precedence (weighted_average in 2b)
+      weight_freshness: 0.6  # For weighted_average (Phase 2b)
     gossip:
       shareable: true
       attenuation: 0.1  # 10% reliability loss per gossip hop
