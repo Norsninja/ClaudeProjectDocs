@@ -132,7 +132,7 @@ def test_propagation():
         adapter.build(entities)
 
         # Exchange tokens
-        result = exchange_tokens(entities, adapter, species_registry)
+        result = exchange_tokens(entities, adapter, species_registry, current_tick=tick+1)
 
         # Check coverage
         coverage = sum(1 for e in entities if 'ship_sentiment' in e.knowledge_tokens)
@@ -182,9 +182,9 @@ def test_determinism():
         adapter = SpatialIndexAdapter()
 
         # Run 5 ticks
-        for _ in range(5):
+        for tick in range(5):
             adapter.build(entities)
-            exchange_tokens(entities, adapter, species_registry)
+            exchange_tokens(entities, adapter, species_registry, current_tick=tick)
 
         return entities
 
@@ -241,7 +241,7 @@ def test_pair_constraint():
     adapter.build(entities)
 
     # Run exchange and track pairs
-    result = exchange_tokens(entities, adapter, species_registry)
+    result = exchange_tokens(entities, adapter, species_registry, current_tick=0)
 
     # Verify pairs_count is reasonable
     # With radius-based neighbors (15m range, 5m spacing), each entity can see many neighbors
@@ -291,7 +291,7 @@ def test_performance():
     adapter.build(entities)
 
     # Warmup: One unmeasured call (matches real usage where gossip runs every tick)
-    exchange_tokens(entities, adapter, species_registry)
+    exchange_tokens(entities, adapter, species_registry, current_tick=0)
 
     # Measure steady-state gossip time (7 runs, disable GC for stable measurement)
     # GC disabled only during timing to measure algorithm performance, not GC behavior
@@ -300,9 +300,9 @@ def test_performance():
 
     times_ns = []
     try:
-        for _ in range(7):
+        for tick in range(7):
             start = time.perf_counter_ns()
-            result = exchange_tokens(entities, adapter, species_registry)
+            result = exchange_tokens(entities, adapter, species_registry, current_tick=tick+1)
             elapsed_ns = time.perf_counter_ns() - start
             times_ns.append(elapsed_ns)
     finally:
@@ -369,7 +369,7 @@ def test_freshness_comparison():
     adapter.build(entities)
 
     # Exchange
-    result = exchange_tokens(entities, adapter, species_registry)
+    result = exchange_tokens(entities, adapter, species_registry, current_tick=0)
 
     # Verify B adopted A's higher version token (no attenuation in Phase 1)
     token_b = entities[1].knowledge_tokens['ship_sentiment']

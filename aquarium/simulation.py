@@ -489,8 +489,13 @@ class AquariumSimulation:
                 thermal_influences=self._thermal_influences
             )
 
-            # Exchange knowledge tokens (vectorized, radius-based, push-pull)
-            gossip_result = exchange_tokens(self.entities, self.spatial, self.species_registry)
+            # Exchange knowledge tokens (vectorized, radius-based, push-pull, Phase 2: with lifecycle)
+            gossip_result = exchange_tokens(
+                self.entities,
+                self.spatial,
+                self.species_registry,
+                current_tick=self.tick_count
+            )
 
             gossip_elapsed = time.perf_counter() - gossip_start
             self._gossip_times.append(gossip_elapsed)

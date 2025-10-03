@@ -89,6 +89,9 @@ GOSSIP_ALLOWED_KINDS = ['ship_sentiment']
 # Minimum gossip neighbors threshold for diagnostics (warn if entity has fewer)
 MIN_GOSSIP_NEIGHBORS = 3
 
+# Token capacity per entity (Phase 2: lifecycle management)
+GOSSIP_TOKEN_CAP_DEFAULT = 16  # Max tokens per entity across all kinds
+
 
 # ============================================================================
 # Spawning Configuration
