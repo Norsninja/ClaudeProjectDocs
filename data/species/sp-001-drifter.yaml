@@ -67,6 +67,19 @@ behaviors:
         acoustic: 0.3  # Quiet when fleeing
         bioluminescent: 0.1  # Dim light to avoid detection
 
+  # Priority 3: Urgent foraging when hungry (Phase 8: Ecosystem)
+  - id: urgent-forage
+    priority: 3
+    conditions:
+      - type: energy_below
+        value: 30.0  # Trigger when energy drops below 30%
+    action:
+      type: forage
+      speed_multiplier: 1.2  # Faster movement to find food
+      emission_multipliers:
+        acoustic: 1.2  # Slightly louder (searching actively)
+        bioluminescent: 1.0
+
   # Priority 2: Flee from hostile ship
   - id: flee-hostile-ship
     priority: 2
@@ -85,9 +98,9 @@ behaviors:
         acoustic: 0.3
         bioluminescent: 0.1
 
-  # Priority 3: Investigate friendly/neutral ship
+  # Priority 4: Investigate friendly/neutral ship
   - id: investigate-ship
-    priority: 3
+    priority: 4
     conditions:
       - type: nearest_entity
         tag: ship
@@ -118,3 +131,13 @@ behaviors:
 knowledge:
   gossip_range: 50.0  # Exchanges knowledge tokens within 50m
   token_capacity: 10  # Maximum stored knowledge tokens
+
+metabolism:
+  energy_max: 100.0  # Maximum energy capacity
+  energy_drain_per_tick: 0.5  # Passive metabolic drain per tick
+  movement_cost_factor: 0.1  # Additional energy cost per m/s velocity
+  feeding_efficiency: 2.0  # Energy gained per resource unit consumed
+  starvation_threshold: 10.0  # Death occurs when energy drops to this level
+
+feeding:
+  intake_rate_per_tick: 1.0  # Max resource units consumed per tick
