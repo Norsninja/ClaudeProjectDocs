@@ -1,6 +1,6 @@
 # Shipmind Aquarium — Progress Report
 
-Last Updated: 2025-10-03
+Last Updated: 2025-10-04
 
 **Status**
 - Phases 1–3 complete: data loader, minimal tick, behavior evaluation.
@@ -13,8 +13,19 @@ Last Updated: 2025-10-03
 - **Knowledge Gossip (Phase 2a) COMPLETE**: exponential decay, attenuation, capacity enforcement; p50 1.88ms @ 1000 entities.
 - **Knowledge Gossip (C7 Phase 4) COMPLETE**: Multi-kind support (ship_sentiment + predator_location); most_recent merge algorithm; position value_type; species-level capacity.
 - **Knowledge Gossip (Phase 7 Network Telemetry) COMPLETE**: Degree histogram (isolated/sparse/connected) with O(E) computation; logged every GOSSIP_LOG_INTERVAL ticks; test suite validated.
+- **Ecosystem Phase 1 (A+B+C) COMPLETE**: Resource fields, energy drain/feeding, death/compaction, hunger-driven behaviors; integration test suite (10 tests); _count invariant fix; behavior cache fallback fix.
 
-**What’s New**
+**What's New**
+- **Ecosystem Phase 1 Complete**:
+  - Resource field extraction from biome obstacles (Gaussian density fields with peak/sigma)
+  - Energy drain/feeding cycle: base metabolic drain + movement cost; density sampling with feeding efficiency
+  - Death detection (energy <= starvation_threshold) + compaction (SoA arrays + entity list in lockstep)
+  - Hunger-driven behaviors: urgent-forage (<30 energy), flee-predator/flee-hostile-ship priority validation
+  - Alive-after-drain revival guard (prevents same-tick revival at threshold)
+  - Integration test suite (10 tests): resources, thresholds, density, revival, compaction, behaviors, dict guards
+- **Critical Fixes**:
+  - `_count` invariant fix: Phase A/B.9 use local `build_count`; B.75 remains sole writer of `_count == len(entities)`
+  - Behavior cache fallback: nearest_entity now falls back to per-entity query when cache misses (handles condition.max_distance > cache radius)
 - Priority behavior engine (flee > investigate > forage) with first-match wins.
 - Ship modeled as inert actor (tag-based targeting; update_ship injection).
 - Per-entity emission multipliers tracked (sensor-ready).
@@ -100,6 +111,7 @@ Spatial Adapter API
 - Spatial Adapter: `aquarium/spatial_queries.py` (cKDTree backend + per-tag/per-biome subtrees; vectorized batch; legacy toggle).
 - Perf Harness/Tests: `aquarium/tests/perf_harness.py`, `aquarium/tests/test_batch_queries.py`, `aquarium/tests/test_batch_performance.py`.
 - Sensors: `aquarium/tests/test_sensor_queries.py`; DTOs in code; `sensor_ms` perf timing in `simulation.py`.
+- Ecosystem: `aquarium/tests/test_ecosystem_phase1_integration.py` (10 integration tests covering resources, thresholds, feeding, death, compaction, behaviors, dict guards).
 - Tests: `aquarium/tests/test_loader.py`, `aquarium/tests/test_tick_minimal.py`, `aquarium/tests/test_behavior.py`.
 
 **Open Items / Notes**
@@ -118,6 +130,7 @@ Spatial Adapter API
 - C6: Gossip Phase 2a lifecycle complete (decay, attenuation, eviction, capacity); perf p50 <2ms @ 1000. **COMPLETED** ✅
 - C7: Multi-kind tokens (ship_sentiment + predator_location); most_recent merge; position value_type. **COMPLETED** ✅
 - C7-Phase7: Network health telemetry (degree histogram) with O(E) computation; interval logging; test validation. **COMPLETED** ✅
+- C8: Ecosystem Phase 1 (A+B+C) complete; resource fields, energy/feeding, death/compaction, hunger behaviors; integration tests (10); _count invariant; cache fallback. **COMPLETED** ✅
 
 **Slice Exit Criteria (Vent Field Alpha)**
 - Avoidance: entities do not penetrate obstacles; speeds clamped; determinism intact; tests green.
