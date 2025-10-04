@@ -18,7 +18,8 @@ from .data_types import (
     SphereObstacle, CylinderObstacle, PlaneObstacle, SpawningConfig,
     WorldParameters, SimulationConfig, BiomeReference,
     TokenDecayConfig, TokenMergeConfig, TokenGossipConfig, TokenInitialValues,
-    InteractionParticipant, InteractionTrigger, InteractionEffects
+    InteractionParticipant, InteractionTrigger, InteractionEffects,
+    MetabolismConfig, FeedingConfig
 )
 
 
@@ -82,6 +83,10 @@ def load_species(file_path: Path, schema_dir: Optional[Path] = None) -> Species:
 
     knowledge = KnowledgeConfig(**data.get('knowledge', {}))
 
+    # Parse metabolism and feeding configs (Phase 8+: Ecosystem)
+    metabolism = MetabolismConfig(**data['metabolism']) if 'metabolism' in data else None
+    feeding = FeedingConfig(**data['feeding']) if 'feeding' in data else None
+
     return Species(
         species_id=data['species_id'],
         name=data['name'],
@@ -91,6 +96,8 @@ def load_species(file_path: Path, schema_dir: Optional[Path] = None) -> Species:
         movement=movement,
         behaviors=behaviors,
         knowledge=knowledge,
+        metabolism=metabolism,
+        feeding=feeding,
         parameters=data.get('parameters', {}),
         description=data.get('description')
     )
