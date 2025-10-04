@@ -61,7 +61,8 @@ def evaluate_behavior(
     all_entities: List[Entity],
     max_speed: float,
     spatial: 'SpatialIndexAdapter',
-    query_cache: dict = None
+    query_cache: dict = None,
+    behavior_context: Optional[dict] = None
 ) -> Tuple[str, np.ndarray, Dict[str, float]]:
     """
     Evaluate entity behavior and compute resulting velocity.
@@ -75,6 +76,7 @@ def evaluate_behavior(
         max_speed: Species max_speed_ms (for speed multiplier calculation)
         spatial: Spatial index adapter for queries
         query_cache: Phase 5 batch query cache (optional)
+        behavior_context: Phase 8 context dict (e.g., {'energy_view': EnergyView})
 
     Returns:
         Tuple of (behavior_id, velocity, emission_multipliers)
@@ -87,7 +89,7 @@ def evaluate_behavior(
 
     # Evaluate each behavior until one matches
     for behavior in sorted_behaviors:
-        if _check_conditions(entity, behavior.conditions, all_entities, spatial, query_cache):
+        if _check_conditions(entity, behavior.conditions, all_entities, spatial, query_cache, behavior_context):
             # Conditions met, apply action
             velocity = _apply_action(entity, behavior.action, all_entities, max_speed, spatial, query_cache)
             emissions = behavior.action.emission_multipliers or {}
@@ -104,7 +106,8 @@ def _check_conditions(
     conditions: List[BehaviorCondition],
     all_entities: List[Entity],
     spatial: 'SpatialIndexAdapter',
-    query_cache: dict = None
+    query_cache: dict = None,
+    behavior_context: Optional[dict] = None
 ) -> bool:
     """
     Check if all conditions are met (AND logic).
@@ -115,6 +118,7 @@ def _check_conditions(
         all_entities: All entities (for neighbor searches)
         spatial: Spatial index adapter for queries
         query_cache: Phase 5 batch query cache (optional)
+        behavior_context: Phase 8 context dict (e.g., {'energy_view': EnergyView})
 
     Returns:
         True if all conditions met, False otherwise
@@ -125,7 +129,7 @@ def _check_conditions(
 
     # All conditions must be true (AND)
     for condition in conditions:
-        if not _check_single_condition(entity, condition, all_entities, spatial, query_cache):
+        if not _check_single_condition(entity, condition, all_entities, spatial, query_cache, behavior_context):
             return False
 
     return True
@@ -136,7 +140,8 @@ def _check_single_condition(
     condition: BehaviorCondition,
     all_entities: List[Entity],
     spatial: 'SpatialIndexAdapter',
-    query_cache: dict = None
+    query_cache: dict = None,
+    behavior_context: Optional[dict] = None
 ) -> bool:
     """
     Check a single condition.
@@ -146,6 +151,7 @@ def _check_single_condition(
     - knowledge_token: Compare token value
     - token_exists: Check if token present
     - within_depth_band: Check if y-coordinate within range
+    - energy_below: Check if current energy < threshold (Phase 8)
 
     Args:
         entity: Entity being evaluated
@@ -153,6 +159,7 @@ def _check_single_condition(
         all_entities: All entities (for nearest_entity search)
         spatial: Spatial index adapter for queries
         query_cache: Phase 5 batch query cache (optional)
+        behavior_context: Phase 8 context dict (e.g., {'energy_view': EnergyView})
 
     Returns:
         True if condition met, False otherwise
@@ -170,18 +177,20 @@ def _check_single_condition(
                     nearest_row = idx_arr[entity_row]
                     dist = dist_arr[entity_row]
 
-                    # Check if match found
-                    if nearest_row == -1 or dist == np.inf:
-                        return False
+                    # Check if match found in cache
+                    if nearest_row != -1 and dist != np.inf:
+                        # Cache hit: check max_distance constraint (condition-specific)
+                        if condition.max_distance is not None and dist > condition.max_distance:
+                            return False
 
-                    # Check max_distance constraint (condition-specific)
-                    if condition.max_distance is not None and dist > condition.max_distance:
-                        return False
+                        # Match found within distance
+                        return True
 
-                    # Match found within distance
-                    return True
+                    # Cache reported no match: fall through to per-entity query
+                    # This handles cases where condition.max_distance > cache radius
 
-        # Fallback to per-entity query (cache miss or disabled)
+        # Fallback to per-entity query (cache miss, no match, or disabled)
+        # Uses condition.max_distance for accurate range checking
         target = spatial.find_nearest_by_tag(entity, condition.tag, max_distance=condition.max_distance)
 
         if target is None:
@@ -201,6 +210,10 @@ def _check_single_condition(
                 token_value = TOKEN_DEFAULTS[token_kind]
             else:
                 return False
+
+        # Phase 8: Handle gossip v2 dict tokens {value, version, timestamp}
+        if isinstance(token_value, dict):
+            token_value = token_value.get('value', TOKEN_DEFAULTS.get(token_kind, 0.0))
 
         # Compare value using operator
         operator = condition.operator
@@ -227,6 +240,18 @@ def _check_single_condition(
         # Check y-coordinate (depth)
         y = entity.position[1]
         return condition.min_depth <= y <= condition.max_depth
+
+    elif condition.type == "energy_below":
+        # Phase 8: Check if current energy < threshold (hunger condition)
+        if behavior_context is None or 'energy_view' not in behavior_context:
+            # No context available - condition cannot be evaluated
+            return False
+
+        energy_view = behavior_context['energy_view']
+        current_energy = energy_view.get_energy(entity.instance_id)
+        threshold = condition.value
+
+        return current_energy < threshold
 
     else:
         # Unknown condition type
@@ -326,7 +351,8 @@ def update_entity_behavior(
     species: Species,
     all_entities: List[Entity],
     spatial: 'SpatialIndexAdapter',
-    query_cache: dict = None
+    query_cache: dict = None,
+    behavior_context: Optional[dict] = None
 ):
     """
     Evaluate and update entity behavior state.
@@ -339,6 +365,7 @@ def update_entity_behavior(
         all_entities: All entities in biome
         spatial: Spatial index adapter for queries
         query_cache: Phase 5 batch query cache (optional, falls back to per-entity queries)
+        behavior_context: Phase 8 context dict (e.g., {'energy_view': EnergyView})
     """
     # Evaluate behavior
     behavior_id, velocity, emissions = evaluate_behavior(
@@ -347,7 +374,8 @@ def update_entity_behavior(
         all_entities=all_entities,
         max_speed=species.movement.max_speed_ms,
         spatial=spatial,
-        query_cache=query_cache
+        query_cache=query_cache,
+        behavior_context=behavior_context
     )
 
     # Update entity state
