@@ -17,55 +17,80 @@ bounds:
 
 obstacles:
   # 12 Hydrothermal vents (spherical obstacles)
+  # Phase 8+: All vents now provide plankton resources (peak=50.0, sigma=50.0)
   spheres:
     - id: vent-001
       center: [50.0, -95.0, 80.0]
       radius: 4.0
       influence_radius: 10.0  # Override default for active vent
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-002
       center: [-30.0, -105.0, 120.0]
       radius: 3.5
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-003
       center: [120.0, -92.0, -40.0]
       radius: 5.0
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-004
       center: [-80.0, -110.0, -60.0]
       radius: 3.0
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-005
       center: [200.0, -98.0, 150.0]
       radius: 4.5
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-006
       center: [-150.0, -102.0, 90.0]
       radius: 3.8
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-007
       center: [10.0, -108.0, -140.0]
       radius: 4.2
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-008
       center: [180.0, -94.0, -100.0]
       radius: 5.5
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-009
       center: [-120.0, -115.0, -150.0]
       radius: 3.2
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-010
       center: [90.0, -100.0, 200.0]
       radius: 4.8
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-011
       center: [-200.0, -107.0, -20.0]
       radius: 3.6
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
     - id: vent-012
       center: [-60.0, -96.0, 180.0]
       radius: 4.0
+      resource_peak: 50.0
+      resource_sigma: 50.0
 
   # 3 Geological ridges (cylindrical obstacles)
   cylinders:
