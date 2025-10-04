@@ -79,6 +79,25 @@ class KnowledgeConfig:
 
 
 @dataclass
+class MetabolismConfig:
+    """Energy and metabolism configuration for species"""
+    energy_max: float  # Maximum energy capacity
+    energy_drain_per_tick: float  # Passive metabolic drain
+    movement_cost_factor: float = 0.1  # Energy cost per m/s velocity
+    feeding_efficiency: float = 2.0  # Energy gained per unit resource consumed
+    feeding_cooldown_ticks: int = 5  # Min ticks between feeding actions
+    starvation_threshold: float = 0.0  # Death occurs at this energy level
+
+
+@dataclass
+class FeedingConfig:
+    """Feeding behavior configuration for species"""
+    diet: List[str] = field(default_factory=lambda: ["plankton"])  # Resource types consumed
+    intake_rate_per_tick: float = 5.0  # Max units consumed per tick (prevents energy spikes)
+    feeding_range_m: float = 0.0  # Feeding range (0.0 = sample at position only)
+
+
+@dataclass
 class Species:
     """Complete species definition"""
     species_id: str
@@ -89,6 +108,8 @@ class Species:
     movement: MovementProperties
     behaviors: List[Behavior]
     knowledge: KnowledgeConfig
+    metabolism: Optional[MetabolismConfig] = None
+    feeding: Optional[FeedingConfig] = None
     parameters: Dict[str, float] = field(default_factory=dict)
     description: Optional[str] = None
 
@@ -105,6 +126,8 @@ class SphereObstacle:
     radius: float
     influence_radius: Optional[float] = None
     thermal_base_delta: Optional[float] = None  # Temperature delta (°C) for thermal sensors
+    resource_peak: Optional[float] = None  # Peak plankton density at vent (Phase 8+: Ecosystem)
+    resource_sigma: Optional[float] = None  # Gaussian falloff distance (Phase 8+: Ecosystem)
 
 
 @dataclass
