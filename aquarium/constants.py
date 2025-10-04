@@ -113,3 +113,29 @@ TICK_TIME_WINDOW = 100  # Number of ticks to average
 
 # Default tick summary interval (print every N ticks)
 TICK_SUMMARY_INTERVAL = 100  # Print summary every 100 ticks
+
+
+# ============================================================================
+# Ecosystem & Energy Configuration (Phase 8+)
+# ============================================================================
+
+# Enable ecosystem energy/feeding/death systems
+USE_ECOSYSTEM = True  # Feature toggle for energy/feeding/death
+
+# Resource field defaults (when biome/vent lacks specific values)
+RESOURCE_DEFAULT_PEAK = 100.0  # Peak plankton density at vent (units/m³)
+RESOURCE_DEFAULT_SIGMA = 50.0  # Gaussian falloff distance (meters)
+RESOURCE_DEFAULT_BASE = 0.0  # Background density everywhere (0.0 = no ambient food)
+
+# Metabolism defaults (when Species.metabolism not specified)
+ENERGY_MAX_DEFAULT = 100.0  # Default maximum energy capacity
+ENERGY_DRAIN_DEFAULT = 0.5  # Passive drain per tick
+MOVEMENT_COST_FACTOR_DEFAULT = 0.1  # Energy per m/s velocity
+FEEDING_EFFICIENCY_DEFAULT = 2.0  # Energy gained per unit resource consumed
+
+# Feeding defaults (when Species.feeding not specified)
+INTAKE_RATE_DEFAULT = 1.0  # Max units of resource consumed per tick
+FEEDING_COOLDOWN_TICKS_DEFAULT = 5  # Ticks between feeding actions
+
+# Logging interval for ecosystem telemetry (ticks)
+ECOSYSTEM_LOG_INTERVAL = 100  # Print population/energy stats every 100 ticks
